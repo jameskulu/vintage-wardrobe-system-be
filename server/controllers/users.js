@@ -1,11 +1,11 @@
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
-const mg = require('../config/mailgun')
 const {
     registerValidation,
     activateAccountValidation,
 } = require('../validation/users')
+const { sendEmail } = require('../config/mail')
 
 exports.register = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body
@@ -43,18 +43,18 @@ exports.register = async (req, res, next) => {
             isVerified: false,
         })
 
-        const verificationData = {
-            from: 'noreply@vintage.com',
-            to: registeredUser.email,
-            subject: 'Account Activation Link',
-            html: `
-            <h2>Please click on given link to activate your account</h2>
-            <p>${process.env.CLIENT_URL}/verify-email/${registeredUser.emailToken}</p>
-        `,
-        }
+        const subject = 'Account Activation Link'
+        const html = `
+            <h2>Confirm your Email Address</h2>
+            <p>Hi, Thank you for signing up. Please click below to confirm your email address.</p>
+            <a href="${process.env.CLIENT_URL}/verify-email/${registeredUser.emailToken}">
+                <button>I Confirm</button>
+            </a>
+            `
 
         // Sending verification email
-        await mg.messages().send(verificationData)
+        sendEmail(registeredUser.email, subject, html)
+
         return res.status(200).json({
             success: true,
             message:
