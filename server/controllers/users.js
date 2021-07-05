@@ -2,7 +2,10 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
 const mg = require('../config/mailgun')
-const { registerValidation } = require('../validation/users')
+const {
+    registerValidation,
+    activateAccountValidation,
+} = require('../validation/users')
 
 exports.register = async (req, res, next) => {
     const { firstName, lastName, email, password } = req.body
@@ -57,6 +60,41 @@ exports.register = async (req, res, next) => {
             message:
                 'Account was created successfully. Email has been sent, please activate your account.',
             data: registeredUser,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.activateAccount = async (req, res, next) => {
+    const { token } = req.body
+
+    // Validation
+    const { error } = activateAccountValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const user = await User.findOne({ where: { emailToken: token } })
+
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'Token is invalid.',
+            })
+
+        await User.update(
+            { emailToken: null, isVerified: true },
+            { where: { id: user.id } }
+        )
+
+        return res.status(200).json({
+            success: true,
+            message: 'Account is verified.',
+            data: user,
         })
     } catch (err) {
         return next(err)

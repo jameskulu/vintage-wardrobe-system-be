@@ -15,3 +15,10 @@ exports.registerValidation = (data) => {
     })
     return schema.validate(data)
 }
+
+exports.activateAccountValidation = (data) => {
+    const schema = Joi.object({
+        token: Joi.string().required(),
+    })
+    return schema.validate(data)
+}
