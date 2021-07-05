@@ -5,7 +5,9 @@ class Header extends Component{
     render(){
         return(
             <div>
-                This is header..
+                <a class="btn btn-primary" href="/login" role="button">Login</a>
+
+                <a class="btn btn-primary" href="/signup" role="button">SignUp</a>
             
             </div>
 
