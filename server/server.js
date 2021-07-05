@@ -17,7 +17,7 @@ app.use(morgan('tiny'))
 const PORT = process.env.PORT || 5000
 
 db.sequelize
-    .sync({force:true})
+    .sync()
     .then(() =>
         app.listen(PORT, () =>
             console.log(
