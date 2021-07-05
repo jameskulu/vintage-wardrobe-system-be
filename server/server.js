@@ -1,8 +1,29 @@
-const express = require('express');
-const app = express();
+const express = require('express')
+const morgan = require('morgan')
+const chalk = require('chalk')
+const cors = require('cors')
+const db = require('./models')
 
-const PORT = process.env.PORT || 5000;
+const app = express()
 
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// .env configuration
+require('dotenv').config()
+
+// Middleware
+app.use(express.json())
+app.use(cors())
+app.use(morgan('tiny'))
+
+const PORT = process.env.PORT || 5000
+
+db.sequelize
+    .sync()
+    .then(() =>
+        app.listen(PORT, () =>
+            console.log(
+                `${chalk.green('✓')} ${chalk.blue(
+                    `Listening on http://localhost:${PORT}/.`
+                )}`
+            )
+        )
+    )
