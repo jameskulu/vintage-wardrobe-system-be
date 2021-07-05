@@ -5,7 +5,7 @@ const mg = require('../config/mailgun')
 const { registerValidation } = require('../validation/users')
 
 exports.register = async (req, res, next) => {
-    const { username, email, password } = req.body
+    const { firstName, lastName, email, password } = req.body
 
     // Validation
     const { error } = registerValidation(req.body)
@@ -17,15 +17,6 @@ exports.register = async (req, res, next) => {
     }
 
     try {
-        // Checking if username exists
-        const usernameExists = await User.findOne({ where: { username } })
-
-        if (usernameExists)
-            return res.status(400).json({
-                success: false,
-                message: 'Username was already taken.',
-            })
-
         // Checking if email exists
         const emailExists = await User.findOne({ where: { email } })
 
@@ -41,7 +32,8 @@ exports.register = async (req, res, next) => {
 
         // Creating a new user
         const registeredUser = await User.create({
-            username,
+            firstName,
+            lastName,
             email,
             password: hashedPassword,
             emailToken: crypto.randomBytes(64).toString('hex'),
@@ -49,7 +41,7 @@ exports.register = async (req, res, next) => {
         })
 
         const verificationData = {
-            from: 'noreply@hello.com',
+            from: 'noreply@vintage.com',
             to: registeredUser.email,
             subject: 'Account Activation Link',
             html: `
