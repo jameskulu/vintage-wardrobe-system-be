@@ -1,9 +1,11 @@
 const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const { User } = require('../models')
 const {
     registerValidation,
     activateAccountValidation,
+    loginValidation,
 } = require('../validation/users')
 const { sendEmail } = require('../config/mail')
 
@@ -95,6 +97,56 @@ exports.activateAccount = async (req, res, next) => {
             success: true,
             message: 'Account is verified.',
             data: user,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.login = async (req, res, next) => {
+    const { email, password } = req.body
+
+    // Validation
+    const { error } = loginValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        // Checking if user with that email exists
+        const user = await User.findOne({ where: { email } })
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid credentials.',
+            })
+
+        // Checking if password matches
+        const isPassword = await bcrypt.compare(password, user.password)
+        if (!isPassword)
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid credentials.',
+            })
+
+        const payload = {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+        }
+
+        // Assigning a token
+        const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET)
+
+        return res.status(200).json({
+            success: true,
+            message: 'You are now logged in.',
+            token,
+            data: payload,
         })
     } catch (err) {
         return next(err)
