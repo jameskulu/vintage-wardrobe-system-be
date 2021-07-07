@@ -1,11 +1,15 @@
 import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
+
 import './css/custom.css'
 import Home from './components/pages/Home/Home';
 import Header from './components/layout/Header/Header';
 import Login from './components/auth/Login';
 import Signup from './components/auth/Signup';
 
+toast.configure();
 function App() {
     return (
         <BrowserRouter>
