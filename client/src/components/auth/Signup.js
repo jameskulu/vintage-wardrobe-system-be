@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Signup = () => {
   const history = useHistory();
@@ -82,10 +82,10 @@ const Signup = () => {
 
           <p>
             Already have an account?{" "}
-            <a id="link-btn" href="/login">
+            <Link id="link-btn" to ="/login">
               Login
-            </a>
-            .
+            </Link>
+            
           </p>
         </div>
       </form>
