@@ -35,7 +35,7 @@ const Signup = () => {
 
     return (
         <div className="container">
-            <form action="/action_page.php">
+            <form action="">
                 <div className="form-container">
                     <h1>SIGN UP</h1>
 
