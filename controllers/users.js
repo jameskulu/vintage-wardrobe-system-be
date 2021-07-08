@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { User } = require('../models')
-const {
+const { 
     registerValidation,
     activateAccountValidation,
     loginValidation,
