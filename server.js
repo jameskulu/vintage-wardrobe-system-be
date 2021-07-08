@@ -35,14 +35,4 @@ app.use((err, req, res) =>
 
 const PORT = process.env.PORT || 5000
 
-db.sequelize
-    .sync()
-    .then(() =>
-        app.listen(PORT, () =>
-            console.log(
-                `${chalk.green('✓')} ${chalk.blue(
-                    `Listening on http://localhost:${PORT}/.`
-                )}`
-            )
-        )
-    )
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT}...`))
