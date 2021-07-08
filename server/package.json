@@ -4,7 +4,7 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "start": "npm start",
+        "start": "node server",
         "dev": "nodemon server"
     },
     "keywords": [],
@@ -14,11 +14,13 @@
         "@hapi/joi": "^17.1.1",
         "bcryptjs": "^2.4.3",
         "chalk": "^4.1.1",
+        "cloudinary": "^1.26.2",
         "cors": "^2.8.5",
         "dotenv": "^10.0.0",
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
         "morgan": "^1.10.0",
+        "multer": "^1.4.2",
         "mysql2": "^2.2.5",
         "nodemailer": "^6.6.2",
         "sequelize": "^6.6.4"
@@ -35,5 +37,8 @@
         "eslint-plugin-react": "^7.21.5",
         "eslint-plugin-react-hooks": "^1.7.0",
         "prettier": "^2.3.0"
+    },
+    "engines": {
+        "node": "14.15.5"
     }
 }
