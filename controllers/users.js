@@ -196,6 +196,7 @@ exports.forgotPassword = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: 'Email has been sent, please reset your password.',
+            data: user,
         })
     } catch (err) {
         return next(err)
@@ -237,6 +238,7 @@ exports.resetPassword = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: 'New password was updated.',
+            data: user,
         })
     } catch (err) {
         return next(err)
