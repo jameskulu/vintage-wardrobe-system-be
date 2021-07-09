@@ -17,6 +17,8 @@
         "no-underscore-dangle": "off",
         "no-useless-escape": "off",
         "strict": "off",
-        "import/no-dynamic-require": "off"
+        "import/no-dynamic-require": "off",
+        "node/no-unpublished-require": "off",
+        "no-undef":"off"
     }
 }
