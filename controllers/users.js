@@ -152,3 +152,123 @@ exports.login = async (req, res, next) => {
         return next(err)
     }
 }
+
+exports.resetPassword = async (req, res, next) => {
+    const { email } = req.body
+    const token = crypto.randomBytes(64).toString('hex')
+
+    // Validation
+    const { error } = resetPasswordValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const user = await User.findOne({ where: { email } })
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'User with that email does not exist.',
+            })
+
+        await user.update({
+            resetToken: token,
+            expireToken: Date.now() + 3600000,
+        })
+
+        const subject = 'Password Reset'
+        const html = `
+            <h2>Reset your password</h2>
+            <p>Please click on given link to reset your password.</p>
+            <a href="${process.env.CLIENT_URL}/reset-password/${token}">
+                <button>I Confirm</button>
+            </a>
+            `
+
+        // Sending forgot password email
+        sendEmail(user.email, subject, html)
+
+        return res.status(200).json({
+            success: true,
+            message: 'Email has been sent, please reset your password.',
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.updatePasswordByToken = async (req, res, next) => {
+    const { newPassword, token } = req.body
+
+    // Validation
+    const { error } = updatePasswordByTokenValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const user = await User.findOne({
+            where: { resetToken: token, expireToken: { [Op.gt]: Date.now() } },
+        })
+
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'Session expired',
+            })
+
+        // Generating hashed password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+        await user.update({
+            password: hashedPassword,
+            resetToken: null,
+            expireToken: null,
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: 'New password was updated.',
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.validToken = async (req, res) => {
+    if (!req.headers.authorization) {
+        return res.status(401).json(false)
+    }
+
+    try {
+        const token = req.headers.authorization.split(' ')[1]
+        if (!token) return res.json(false)
+
+        const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+        if (!verified) return res.json(false)
+
+        const user = await User.findByPk(verified.id)
+        if (!user) return res.json(false)
+
+        return res.json(true)
+    } catch (err) {
+        return res.status(400).json({ error: err.message })
+    }
+}
+
+exports.loggedInUser = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id)
+        user.password = undefined
+        user.resetToken = undefined
+        user.emailToken = undefined
+        return res.json(user)
+    } catch (err) {
+        return res.status(400).json({ error: err.message })
+    }
+}
