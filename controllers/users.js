@@ -153,7 +153,7 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.resetPassword = async (req, res, next) => {
+exports.forgotPassword = async (req, res, next) => {
     const { email } = req.body
     const token = crypto.randomBytes(64).toString('hex')
 
@@ -199,7 +199,7 @@ exports.resetPassword = async (req, res, next) => {
     }
 }
 
-exports.updatePasswordByToken = async (req, res, next) => {
+exports.resetPassword = async (req, res, next) => {
     const { newPassword, token } = req.body
 
     // Validation

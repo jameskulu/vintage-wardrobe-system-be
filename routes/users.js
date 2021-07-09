@@ -4,8 +4,8 @@ const {
     register,
     activateAccount,
     login,
+    forgotPassword,
     resetPassword,
-    updatePasswordByToken,
     validToken,
     loggedInUser,
 } = require('../controllers/users')
@@ -20,10 +20,10 @@ router.post('/email-activate', activateAccount)
 router.post('/login', isUserVerified, login)
 
 // Forgot password
-router.post('/reset-password', resetPassword)
+router.post('/forgot-password', forgotPassword)
 
 // Change password from forgot password
-router.post('/new-password', updatePasswordByToken)
+router.post('/reset-password', resetPassword)
 
 // Verify Token
 router.post('/tokenIsValid', validToken)
