@@ -11,10 +11,10 @@ describe('Register API', () => {
     describe('POST /api/users/register', () => {
         it('It should register new user', (done) => {
             const registers = {
-                firstName: 'arbin',
-                lastName: 'chy',
-                email: 'arbin@gmail.com',
-                password: 'arbins',
+                firstName: 'hahha',
+                lastName: 'hehehe',
+                email: 'haha@gmail.com',
+                password: 'hehehehe',
             }
             chai.request(server)
                 .post('/api/users/register')
