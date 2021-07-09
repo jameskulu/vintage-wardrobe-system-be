@@ -6,6 +6,8 @@ const {
     registerValidation,
     activateAccountValidation,
     loginValidation,
+    forgotPasswordValidation,
+    resetPasswordValidation,
 } = require('../validation/users')
 const { sendEmail } = require('../config/mail')
 
@@ -158,7 +160,7 @@ exports.forgotPassword = async (req, res, next) => {
     const token = crypto.randomBytes(64).toString('hex')
 
     // Validation
-    const { error } = resetPasswordValidation(req.body)
+    const { error } = forgotPasswordValidation(req.body)
     if (error)
         return res.status(400).json({
             success: false,
@@ -183,7 +185,7 @@ exports.forgotPassword = async (req, res, next) => {
             <h2>Reset your password</h2>
             <p>Please click on given link to reset your password.</p>
             <a href="${process.env.CLIENT_URL}/reset-password/${token}">
-                <button>I Confirm</button>
+                <button>Reset</button>
             </a>
             `
 
@@ -203,7 +205,7 @@ exports.resetPassword = async (req, res, next) => {
     const { newPassword, token } = req.body
 
     // Validation
-    const { error } = updatePasswordByTokenValidation(req.body)
+    const { error } = resetPasswordValidation(req.body)
     if (error)
         return res.status(400).json({
             success: false,

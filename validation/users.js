@@ -37,7 +37,7 @@ exports.loginValidation = (data) => {
     return schema.validate(data)
 }
 
-exports.resetPasswordValidation = (data) => {
+exports.forgotPasswordValidation = (data) => {
     const schema = Joi.object({
         email: Joi.string()
             .min(6)
@@ -50,7 +50,7 @@ exports.resetPasswordValidation = (data) => {
     return schema.validate(data)
 }
 
-exports.updatePasswordByTokenValidation = (data) => {
+exports.resetPasswordValidation = (data) => {
     const schema = Joi.object({
         newPassword: Joi.string().required(),
         token: Joi.string().required(),
