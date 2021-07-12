@@ -7,7 +7,7 @@ chai.use(chaiHttp)
 
 describe('Product API', () => {
 
-    describe('GET /api/products', () => {
+    describe('GET /api/products/productView', () => {
         it("It should get all the products",(done)=>{
             chai.request(server)
                 .get("/api/products")
@@ -21,7 +21,7 @@ describe('Product API', () => {
                 })
         })
     })
-    describe('GET /api/products/:productId', () => {
+    describe('GET /api/products/productView/:productId', () => {
         it("It should get a single product",(done)=>{
             const productId = "456783sha7823hs"
             chai.request(server)
@@ -34,6 +34,38 @@ describe('Product API', () => {
                     response.body.should.have.property('data')
                     done()
                 })
+        })
+    })
+    describe('POST /api/products/productView/new', () => {
+        it("It should login get a token and post a new product",(done)=>{
+
+            chai.request(server)
+            .post("/api/products")
+            .send({
+                email:"test@gmail.com",
+                password:"teesstt"
+            })
+            .end((err,response)=>{
+                response.should.have.status(200)
+                var token = response.body.token;
+            
+            const product = {
+                product_name:"asdfghj",
+                size:29,
+            }
+            chai.request(server)
+                .post("/api/products/new")
+                .set('Authorization','Bearer ' + token)
+                .send(product)
+                .end((err,response)=>{
+                    response.should.have.status(200)
+                    response.body.should.be.a('object')
+                    response.body.should.have.property('success')
+                    response.body.should.have.property('message')
+                    response.body.should.have.property('data')
+                    done()
+                })
+            })
         })
     })
 })
