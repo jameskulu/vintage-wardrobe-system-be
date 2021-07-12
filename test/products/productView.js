@@ -21,4 +21,19 @@ describe('Product API', () => {
                 })
         })
     })
+    describe('GET /api/products/:productId', () => {
+        it("It should get a single product",(done)=>{
+            const productId = "456783sha7823hs"
+            chai.request(server)
+                .get("/api/products/"+productId)
+                .end((err,response)=>{
+                    response.should.have.status(200)
+                    response.body.should.be.a('object')
+                    response.body.should.have.property('success')
+                    response.body.should.have.property('message')
+                    response.body.should.have.property('data')
+                    done()
+                })
+        })
+    })
 })
