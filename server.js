@@ -16,6 +16,7 @@ app.use(morgan('tiny'))
 
 // Routes
 app.use('/api/users', require('./routes/users'))
+app.use('/api/products', require('./routes/products'))
 
 // 404 not found
 app.use((req, res) =>
