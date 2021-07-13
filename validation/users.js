@@ -2,20 +2,16 @@ const Joi = require('@hapi/joi')
 
 exports.registerValidation = (data) => {
     const schema = Joi.object({
-        firstName: Joi.string().required().messages('First Name is required'),
-        lastName: Joi.string().required().messages('Last Name is required'),
+        firstName: Joi.string().required(),
+        lastName: Joi.string().required(),
         email: Joi.string()
             .min(6)
             .required()
-            .messages('Email is required')
             .email({
                 minDomainSegments: 2,
                 tlds: { allow: ['com', 'net'] },
             }),
-        password: Joi.string()
-            .min(6)
-            .required()
-            .messages('Password is required'),
+        password: Joi.string().min(6).required(),
     })
     return schema.validate(data)
 }
@@ -32,15 +28,11 @@ exports.loginValidation = (data) => {
         email: Joi.string()
             .min(6)
             .required()
-            .messages('Email is required')
             .email({
                 minDomainSegments: 2,
                 tlds: { allow: ['com', 'net'] },
             }),
-        password: Joi.string()
-            .min(6)
-            .required()
-            .messages('Password is required'),
+        password: Joi.string().min(6).required(),
     })
     return schema.validate(data)
 }
@@ -50,7 +42,6 @@ exports.forgotPasswordValidation = (data) => {
         email: Joi.string()
             .min(6)
             .required()
-            .messages('Email is required')
             .email({
                 minDomainSegments: 2,
                 tlds: { allow: ['com', 'net'] },
@@ -61,10 +52,8 @@ exports.forgotPasswordValidation = (data) => {
 
 exports.resetPasswordValidation = (data) => {
     const schema = Joi.object({
-        newPassword: Joi.string()
-            .required()
-            .messages('New password is required'),
-        token: Joi.string().required().messages('Token is required'),
+        newPassword: Joi.string().required(),
+        token: Joi.string().required(),
     })
     return schema.validate(data)
 }
