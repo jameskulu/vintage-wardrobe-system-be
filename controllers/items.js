@@ -50,3 +50,50 @@ exports.single = async (req, res, next) => {
         return next(err)
     }
 }
+
+exports.create = async (req, res, next) => {
+    const { name, description, price, subCategoryId } = req.body
+    const userId = req.user.id
+
+    // Validation
+    const { error } = createValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const subCategory = await SubCategory.findByPk(subCategoryId)
+        if (!subCategory)
+            return res.status(400).json({
+                success: false,
+                message: 'Sub Category not found',
+            })
+
+        const createdItem = await Item.create(
+            {
+                name,
+                description,
+                price,
+                subCategoryId,
+                userId,
+            }
+            // {
+            //     include: [
+            //         {
+            //             model: User,
+            //             as: 'user',
+            //         },
+            //     ],
+            // }
+        )
+        return res.status(200).json({
+            success: true,
+            message: 'New item was added.',
+            data: createdItem,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}

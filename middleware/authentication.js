@@ -49,3 +49,9 @@ exports.isUserVerified = async (req, res, next) => {
         })
     }
 }
+
+exports.isAdmin = async (req, res, next) => {
+    const user = await User.findByPk(req.user.id)
+    if (user && user.role === 'admin') return next()
+    return res.status(401).json({ success: false, message: 'Access Denied' })
+}
