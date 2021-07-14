@@ -12,11 +12,7 @@ require('dotenv').config()
 // Middleware
 app.use(express.json())
 
-const corsOptions = {
-    origin: ['http://localhost:5000', 'https://vintagewardrobe.herokuapp.com/'],
-    optionsSuccessStatus: 200,
-}
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(morgan('tiny'))
 
 // Routes
