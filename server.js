@@ -19,6 +19,10 @@ app.use(morgan('tiny'))
 app.use('/api/users', require('./routes/users'))
 app.use('/api/items', require('./routes/items'))
 
+// Admin routes
+app.use('/api/admin/categories', require('./routes/admin/categories'))
+app.use('/api/admin/subCategories', require('./routes/admin/subCategories'))
+
 // 404 not found
 app.use((req, res) =>
     res.status(404).json({
