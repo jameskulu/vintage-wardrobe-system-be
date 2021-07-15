@@ -11,12 +11,17 @@ require('dotenv').config()
 
 // Middleware
 app.use(express.json())
+
 app.use(cors())
 app.use(morgan('tiny'))
 
 // Routes
 app.use('/api/users', require('./routes/users'))
-app.use('/api/products', require('./routes/products'))
+app.use('/api/items', require('./routes/items'))
+
+// Admin routes
+app.use('/api/admin/categories', require('./routes/admin/categories'))
+app.use('/api/admin/subCategories', require('./routes/admin/subCategories'))
 
 // 404 not found
 app.use((req, res) =>
@@ -36,6 +41,19 @@ app.use((err, req, res) =>
 
 const PORT = process.env.PORT || 5000
 
+db.sequelize
+    .sync()
+    .then(() => {
+        console.log(`${chalk.green('✓')} ${chalk.blue(`Database synced`)}`)
+    })
+    .catch((err) => {
+        console.log(err)
+    })
+
 module.exports = app.listen(PORT, () =>
-    console.log(`Server is listening on port ${PORT}...`)
+    console.log(
+        `${chalk.green('✓')} ${chalk.blue(
+            `Listening on http://localhost:${PORT}/.`
+        )}`
+    )
 )
