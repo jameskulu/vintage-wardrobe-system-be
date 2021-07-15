@@ -7,10 +7,10 @@ chai.use(chaiHttp)
 
 describe('Product API', () => {
 
-    describe('GET /api/products/productView', () => {
+    describe('GET /api/items', () => {
         it("It should get all the products",(done)=>{
             chai.request(server)
-                .get("/api/products")
+                .get("/api/items")
                 .end((err,response)=>{
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -21,11 +21,11 @@ describe('Product API', () => {
                 })
         })
     })
-    describe('GET /api/products/productView/:productId', () => {
+    describe('GET /api/items/:itemId', () => {
         it("It should get a single product",(done)=>{
-            const productId = "456783sha7823hs"
+            const itemId = "456783sha7823hs"
             chai.request(server)
-                .get("/api/products/"+productId)
+                .get("/api/items/"+itemId)
                 .end((err,response)=>{
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -36,11 +36,11 @@ describe('Product API', () => {
                 })
         })
     })
-    describe('POST /api/products/productView/new', () => {
+    describe('POST /api/items/new', () => {
         it("It should login get a token and post a new product",(done)=>{
 
             chai.request(server)
-            .post("/api/products")
+            .post("/api/users/login")
             .send({
                 email:"test@gmail.com",
                 password:"teesstt"
@@ -54,7 +54,7 @@ describe('Product API', () => {
                 size:29,
             }
             chai.request(server)
-                .post("/api/products/new")
+                .post("/api/items/new")
                 .set('Authorization','Bearer ' + token)
                 .send(product)
                 .end((err,response)=>{
