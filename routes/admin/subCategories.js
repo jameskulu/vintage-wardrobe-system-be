@@ -6,7 +6,7 @@ const {
     create,
     update,
     remove,
-} = require('../../controllers/admin/categories')
+} = require('../../controllers/admin/subCategories')
 
 router.get('/', verifyToken, isAdmin, all)
 
