@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const { verifyToken } = require('../middleware/authentication')
 
-const { all, single, create } = require('../controllers/items')
+const { all, single, create, search } = require('../controllers/items')
 
 router.get('/s', search)
 
