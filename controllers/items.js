@@ -1,6 +1,30 @@
 const { Item, User, SubCategory } = require('../models')
 const { createValidation } = require('../validation/items')
 
+exports.search = async (req, res) => {
+    const { q } = req.query
+    try {
+        const searchedItems = await Item.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${q}%`,
+                },
+            },
+        })
+
+        res.status(200).json({
+            success: true,
+            message: 'Item searched successfully',
+            data: searchedItems,
+        })
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err,
+        })
+    }
+}
+
 exports.all = async (req, res, next) => {
     try {
         const items = await Item.findAll({
