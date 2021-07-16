@@ -9,6 +9,10 @@ exports.all = async (req, res, next) => {
                     model: User,
                     as: 'user',
                 },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
             ],
         })
         return res.status(200).json({
@@ -31,6 +35,10 @@ exports.single = async (req, res, next) => {
                 {
                     model: User,
                     as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
                 },
             ],
         })
