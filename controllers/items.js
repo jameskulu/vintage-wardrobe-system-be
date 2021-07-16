@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Item, User, SubCategory } = require('../models')
 const { createValidation } = require('../validation/items')
 
@@ -20,7 +21,7 @@ exports.search = async (req, res) => {
     } catch (err) {
         res.status(400).json({
             success: false,
-            message: err,
+            message: err.message,
         })
     }
 }
