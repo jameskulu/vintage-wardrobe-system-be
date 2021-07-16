@@ -50,8 +50,10 @@ describe('Product API', () => {
                 var token = response.body.token;
             
             const product = {
-                product_name:"asdfghj",
-                size:29,
+                name:"asdfghj",
+                description:"this is rental clothes",
+                price:"Rs500",
+                subCategoryId:"shirt",
             }
             chai.request(server)
                 .post("/api/items/new")
