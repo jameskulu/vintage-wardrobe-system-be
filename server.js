@@ -18,6 +18,7 @@ app.use(morgan('tiny'))
 // Routes
 app.use('/api/users', require('./routes/users'))
 app.use('/api/items', require('./routes/items'))
+app.use('/api/renter', require('./routes/renters'))
 
 // Admin routes
 app.use('/api/admin/categories', require('./routes/admin/categories'))
