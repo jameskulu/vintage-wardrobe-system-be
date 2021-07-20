@@ -9,6 +9,4 @@ router.get('/', all)
 
 router.get('/:itemId', single)
 
-router.post('/new', verifyToken, create)
-
 module.exports = router
