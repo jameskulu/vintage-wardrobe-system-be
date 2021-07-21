@@ -1,5 +1,30 @@
+const { Op } = require('sequelize')
 const { Item, User, SubCategory } = require('../models')
 const { createValidation } = require('../validation/items')
+
+exports.search = async (req, res) => {
+    const { q } = req.query
+    try {
+        const searchedItems = await Item.findAll({
+            where: {
+                name: {
+                    [Op.like]: `%${q}%`,
+                },
+            },
+        })
+
+        res.status(200).json({
+            success: true,
+            message: 'Item searched successfully',
+            data: searchedItems,
+        })
+    } catch (err) {
+        res.status(400).json({
+            success: false,
+            message: err.message,
+        })
+    }
+}
 
 exports.all = async (req, res, next) => {
     try {
@@ -8,6 +33,10 @@ exports.all = async (req, res, next) => {
                 {
                     model: User,
                     as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
                 },
             ],
         })
@@ -32,6 +61,10 @@ exports.single = async (req, res, next) => {
                     model: User,
                     as: 'user',
                 },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
             ],
         })
 
@@ -51,49 +84,4 @@ exports.single = async (req, res, next) => {
     }
 }
 
-exports.create = async (req, res, next) => {
-    const { name, description, price, subCategoryId } = req.body
-    const userId = req.user.id
 
-    // Validation
-    const { error } = createValidation(req.body)
-    if (error)
-        return res.status(400).json({
-            success: false,
-            message: error.details[0].message,
-        })
-
-    try {
-        const subCategory = await SubCategory.findByPk(subCategoryId)
-        if (!subCategory)
-            return res.status(400).json({
-                success: false,
-                message: 'Sub Category not found',
-            })
-
-        const createdItem = await Item.create(
-            {
-                name,
-                description,
-                price,
-                subCategoryId,
-                userId,
-            }
-            // {
-            //     include: [
-            //         {
-            //             model: User,
-            //             as: 'user',
-            //         },
-            //     ],
-            // }
-        )
-        return res.status(200).json({
-            success: true,
-            message: 'New item was added.',
-            data: createdItem,
-        })
-    } catch (err) {
-        return next(err)
-    }
-}
