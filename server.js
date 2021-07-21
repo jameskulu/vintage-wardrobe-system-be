@@ -22,7 +22,7 @@ app.use('/api/renter', require('./routes/renters'))
 
 // Admin routes
 app.use('/api/admin/categories', require('./routes/admin/categories'))
-app.use('/api/admin/subCategories', require('./routes/admin/subCategories'))
+app.use('/api/admin/sub-categories', require('./routes/admin/subCategories'))
 
 // 404 not found
 app.use((req, res) =>
