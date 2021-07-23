@@ -134,7 +134,6 @@ exports.remove = async (req, res, next) => {
     }
 }
 
-
 exports.getOrders = async (req, res, next) => {
     const userId = req.user.id
     try {
