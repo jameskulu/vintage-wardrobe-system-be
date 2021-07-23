@@ -1,4 +1,4 @@
-const { User, Order, Item } = require('../models')
+const { User, Order, Item, SubCategory } = require('../models')
 const {
     createValidation,
     orderStatusValidation,
@@ -65,6 +65,75 @@ exports.create = async (req, res, next) => {
         return next(err)
     }
 }
+
+exports.update = async (req, res, next) => {
+    const { itemId } = req.params
+    const userId = req.user.id
+    const { name, description, price, subCategoryId } = req.body
+
+    try {
+        const singleItem = await Item.findByPk(itemId)
+
+        if (!singleItem)
+            return res.status(404).json({
+                success: false,
+                message: 'Item not found!',
+            })
+
+        if (singleItem.userId !== userId)
+            return res.status(400).json({
+                success: false,
+                message:
+                    'Access denied ! Only creator of this item can update.',
+            })
+
+        const updatedItem = await Item.update(
+            { name, description, price, subCategoryId },
+            { where: { id: itemId } }
+        )
+        return res.status(200).json({
+            success: true,
+            message: 'Item was updated.',
+            data: updatedItem,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.remove = async (req, res, next) => {
+    const { itemId } = req.params
+    const userId = req.user.id
+
+    try {
+        const singleItem = await Item.findByPk(itemId)
+
+        if (!singleItem)
+            return res.status(404).json({
+                success: false,
+                message: 'Item not found!',
+            })
+
+        if (singleItem.userId !== userId)
+            return res.status(400).json({
+                success: false,
+                message:
+                    'Access denied ! Only creator of this item can delete.',
+            })
+
+        const deletedItem = await Item.destroy({
+            where: { id: itemId },
+        })
+        return res.status(200).json({
+            success: true,
+            message: 'Item was deleted.',
+            data: deletedItem,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
 
 exports.getOrders = async (req, res, next) => {
     const userId = req.user.id
