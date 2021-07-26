@@ -46,7 +46,7 @@ app.use((err, req, res) =>
 const PORT = process.env.PORT || 5000
 
 db.sequelize
-    .sync()
+    .sync({ force: true })
     .then(() => {
         console.log(`${chalk.green('✓')} ${chalk.blue(`Database synced`)}`)
     })

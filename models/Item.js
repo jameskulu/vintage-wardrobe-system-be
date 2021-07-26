@@ -19,6 +19,17 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 0.0,
             allowNull: false,
         },
+        size: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        color: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        imageURL: {
+            type: DataTypes.STRING,
+        },
         isActive: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
@@ -42,11 +53,11 @@ module.exports = (sequelize, DataTypes) => {
             as: 'subCategory',
         })
 
-        // Item.hasMany(models.Order, {
-        //     onDelete: 'cascade',
-        //     foreignKey: 'itemId',
-        //     as: 'item',
-        // })
+        Item.hasMany(models.Order, {
+            onDelete: 'cascade',
+            foreignKey: 'itemId',
+            as: 'item',
+        })
 
         Item.hasMany(models.ItemImage, {
             onDelete: 'cascade',

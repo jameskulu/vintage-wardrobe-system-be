@@ -20,7 +20,7 @@ exports.getUploadedItems = async (req, res, next) => {
 }
 
 exports.create = async (req, res, next) => {
-    const { name, description, price, subCategoryId } = req.body
+    const { name, description, price, size, color, subCategoryId } = req.body
     const userId = req.user.id
 
     // Validation
@@ -44,6 +44,8 @@ exports.create = async (req, res, next) => {
                 name,
                 description,
                 price,
+                size,
+                color,
                 subCategoryId,
                 userId,
             }
@@ -69,7 +71,7 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     const { itemId } = req.params
     const userId = req.user.id
-    const { name, description, price } = req.body
+    const { name, description, price, size, color } = req.body
 
     try {
         const singleItem = await Item.findByPk(itemId)
@@ -88,7 +90,7 @@ exports.update = async (req, res, next) => {
             })
 
         const updatedItem = await Item.update(
-            { name, description, price },
+            { name, description, price, size, color },
             { where: { id: itemId } }
         )
         return res.status(200).json({
