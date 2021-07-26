@@ -2,14 +2,7 @@ const { Category, SubCategory } = require('../models')
 
 exports.all = async (req, res, next) => {
     try {
-        const category = await Category.findAll({
-            include: [
-                {
-                    model: SubCategory,
-                    as: 'subCategory',
-                },
-            ],
-        })
+        const category = await Category.findAll()
         return res.status(200).json({
             success: true,
             message: 'All the available categories are fetched.',
