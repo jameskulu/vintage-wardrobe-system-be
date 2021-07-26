@@ -22,7 +22,7 @@ exports.single = async (req, res, next) => {
             include: [
                 {
                     model: SubCategory,
-                    as: 'subCategory',
+                    as: 'category',
                 },
             ],
         })
