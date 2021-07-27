@@ -1,4 +1,4 @@
-const { Category } = require('../models')
+const { Category, SubCategory } = require('../models')
 
 exports.all = async (req, res, next) => {
     try {
@@ -18,7 +18,14 @@ exports.single = async (req, res, next) => {
     const { categoryId } = req.params
 
     try {
-        const singleCategory = await Category.findByPk(categoryId)
+        const singleCategory = await Category.findByPk(categoryId, {
+            include: [
+                {
+                    model: SubCategory,
+                    as: 'category',
+                },
+            ],
+        })
 
         if (!singleCategory)
             return res.status(404).json({

@@ -54,5 +54,19 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
+    User.associate = (models) => {
+        User.hasMany(models.Order, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'userOrder',
+        })
+
+        User.hasMany(models.Item, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'user',
+        })
+    }
+
     return User
 }

@@ -13,18 +13,16 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     SubCategory.associate = (models) => {
-        SubCategory.belongsTo(models.Category, {
-            onDelete: 'cascade',
-            foreignKey: 'categoryId',
-            as: 'category',
-        })
-    }
-
-    SubCategory.associate = (models) => {
         SubCategory.hasMany(models.Item, {
             onDelete: 'cascade',
             foreignKey: 'subCategoryId',
             as: 'subCategory',
+        })
+
+        SubCategory.belongsTo(models.Category, {
+            onDelete: 'cascade',
+            foreignKey: 'categoryId',
+            as: 'category',
         })
     }
 
