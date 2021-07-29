@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const { User } = require('../models')
+const { User, Order } = require('../models')
 const {
     registerValidation,
     activateAccountValidation,
