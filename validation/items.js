@@ -12,9 +12,10 @@ exports.createValidation = (data) => {
             'string.empty': `"Description" cannot be an empty field`,
             'any.required': `"Description" is a required field`,
         }),
-        price: Joi.number().required().messages({
+        price: Joi.number().positive().allow(0).required().messages({
             'string.base': `"Price" should be a type of 'number'`,
             'string.empty': `"Price" cannot be an empty field`,
+            'string.positive': `"Price" cannot be a negative number`,
             'any.required': `"Price" is a required field`,
         }),
         subCategoryId: Joi.string().required().messages({

@@ -8,6 +8,8 @@ const {
     resetPassword,
     validToken,
     loggedInUser,
+    getOrders,
+    cancelOrder,
 } = require('../controllers/users')
 
 // User registration
@@ -30,5 +32,11 @@ router.post('/tokenIsValid', validToken)
 
 // get logged in user
 router.get('/', verifyToken, loggedInUser)
+
+// get all booked item of loggedIn user
+router.get('/orders', verifyToken, getOrders)
+
+// Cancel order
+router.delete('/orders/:orderId/cancel', verifyToken, cancelOrder)
 
 module.exports = router

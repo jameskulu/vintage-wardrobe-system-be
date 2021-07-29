@@ -277,3 +277,82 @@ exports.loggedInUser = async (req, res) => {
         return res.status(400).json({ error: err.message })
     }
 }
+
+exports.getOrders = async (req, res, next) => {
+    const userId = req.user.id
+    try {
+        const orderedItems = await Order.findAll(
+            {
+                include: [
+                    {
+                        model: Item,
+                        as: 'item',
+                    },
+                    {
+                        model: User,
+                        as: 'user',
+                    },
+                ],
+            },
+            { where: { userId } }
+        )
+        return res.status(200).json({
+            success: true,
+            message: 'All the ordered items are fetched.',
+            count: orderedItems.length,
+            data: orderedItems,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.cancelOrder = async (req, res, next) => {
+    const userId = req.user.id
+    const { orderId } = req.params
+    try {
+        const orderedItem = await Order.findOne(
+            {
+                include: [
+                    {
+                        model: Item,
+                        as: 'item',
+                    },
+                ],
+            },
+            {
+                where: { id: orderId, userId },
+            }
+        )
+        if (!orderedItem) {
+            return res.status(400).json({
+                success: false,
+                message: 'Order not found',
+            })
+        }
+
+        if (orderedItem.status !== 'pending') {
+            return res.status(400).json({
+                success: false,
+                message: 'Only pending orders can be canceled',
+            })
+        }
+
+        const cancelOrder = await Order.destroy({
+            where: { id: orderedItem.id },
+        })
+
+        await Item.update(
+            { isAvailable: true },
+            { where: { id: orderedItem.item.id } }
+        )
+
+        return res.status(200).json({
+            success: true,
+            message: 'Order canceled.',
+            data: cancelOrder,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
