@@ -138,19 +138,28 @@ exports.remove = async (req, res, next) => {
 
 exports.getOrders = async (req, res, next) => {
     const userId = req.user.id
+    console.log(userId)
     try {
         const orderedItems = await Order.findAll({
             include: [
                 {
                     model: User,
                     as: 'user',
-                    where: {
-                        id: userId,
-                    },
+                    required: true,
                 },
                 {
                     model: Item,
                     as: 'item',
+                    required: true,
+                    include: [
+                        {
+                            model: User,
+                            as: 'user',
+                            where: {
+                                id: userId,
+                            },
+                        },
+                    ],
                 },
             ],
         })

@@ -11,7 +11,7 @@ module.exports = {
         dialectOptions: {
             bigNumberStrings: true,
         },
-        logging: false,
+        logging: true,
     },
     test: {
         username: process.env.DB_USERNAME,
