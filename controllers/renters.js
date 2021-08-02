@@ -1,4 +1,4 @@
-const { User, Order, Item, SubCategory } = require('../models')
+const { User, Order, Item, SubCategory, ItemReviewed } = require('../models')
 const {
     createValidation,
     orderStatusValidation,
@@ -231,6 +231,18 @@ exports.changeOrderStatus = async (req, res, next) => {
                 { isAvailable: true },
                 { where: { id: order.item.id } }
             )
+
+            // Item reviewed
+            const itemReviewed = await ItemReviewed.findOne({
+                where: { itemId: order.item.id, userId },
+            })
+
+            if (!itemReviewed) {
+                await ItemReviewed.create(
+                    { userId, isReviewed: false, itemId: order.item.id },
+                    { where: { id: order.item.id } }
+                )
+            }
         }
 
         return res.status(200).json({

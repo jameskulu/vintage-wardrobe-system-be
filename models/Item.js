@@ -64,6 +64,30 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'itemId',
             as: 'images',
         })
+
+        Item.hasMany(models.Wishlist, {
+            onDelete: 'cascade',
+            foreignKey: 'itemId',
+            as: 'wishlist',
+        })
+
+        Item.hasMany(models.Review, {
+            onDelete: 'cascade',
+            foreignKey: 'itemId',
+            as: 'review',
+        })
+
+        Item.hasMany(models.ItemReviewed, {
+            onDelete: 'cascade',
+            foreignKey: 'itemId',
+            as: 'itemReviewed',
+        })
+
+        Item.hasMany(models.Comment, {
+            onDelete: 'cascade',
+            foreignKey: 'itemId',
+            as: 'comment',
+        })
     }
 
     return Item

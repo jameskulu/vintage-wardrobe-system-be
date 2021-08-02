@@ -2,13 +2,14 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const { User, Order, Item } = require('../models')
+const { User, Order, Item, Wishlist } = require('../models')
 const {
     registerValidation,
     activateAccountValidation,
     loginValidation,
     forgotPasswordValidation,
     resetPasswordValidation,
+    addWishlistValidation,
 } = require('../validation/users')
 const { sendEmail } = require('../config/mail')
 
@@ -345,6 +346,115 @@ exports.cancelOrder = async (req, res, next) => {
             success: true,
             message: 'Order canceled.',
             data: cancelOrder,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.getWishlist = async (req, res, next) => {
+    const userId = req.user.id
+    try {
+        const wishlist = await Wishlist.findAll(
+            { where: { userId } },
+            {
+                include: [
+                    {
+                        model: User,
+                        as: 'user',
+                    },
+                    {
+                        model: Item,
+                        as: 'item',
+                    },
+                ],
+            }
+        )
+        return res.status(200).json({
+            success: true,
+            message: 'All the available wishlist are fetched.',
+            count: wishlist.length,
+            data: wishlist,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.addWishlist = async (req, res, next) => {
+    const { itemId } = req.body
+
+    // Validation
+    const { error } = addWishlistValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const item = await Item.findByPk(itemId)
+        if (!item)
+            return res.status(400).json({
+                success: false,
+                message: 'Item not found',
+            })
+
+        const wishlist = await Wishlist.findOne({ where: { userId, itemId } })
+        if (wishlist)
+            return res.status(400).json({
+                success: false,
+                message: 'Item already added to wishlist',
+            })
+
+        const createdWishlist = await Wishlist.create({
+            itemId,
+            userId,
+        })
+        return res.status(200).json({
+            success: true,
+            message: 'New wishlist was added.',
+            data: createdWishlist,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.removeWishlist = async (req, res, next) => {
+    const { itemId } = req.body
+
+    // Validation
+    const { error } = addWishlistValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const item = await Item.findByPk(itemId)
+        if (!item)
+            return res.status(400).json({
+                success: false,
+                message: 'Item not found',
+            })
+
+        const wishlist = await Wishlist.findOne({ where: { userId, itemId } })
+        if (!wishlist)
+            return res.status(400).json({
+                success: false,
+                message: 'Item not included in wishlist',
+            })
+
+        const deletedWishlist = await Wishlist.destroy({
+            where: { itemId, userId },
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: 'Wishlist was removed.',
+            data: deletedWishlist,
         })
     } catch (err) {
         return next(err)
