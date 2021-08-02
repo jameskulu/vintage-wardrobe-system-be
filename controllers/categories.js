@@ -42,3 +42,34 @@ exports.single = async (req, res, next) => {
         return next(err)
     }
 }
+
+exports.itemsByCategory = async (req, res, next) => {
+    const { category } = req.params
+
+    try {
+        const items = await Item.findAll({
+            include: [
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                    required: true,
+                    include: [
+                        {
+                            model: Category,
+                            as: 'category',
+                            where: { name: category },
+                        },
+                    ],
+                },
+            ],
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: `items of ${category} category is fetched.`,
+            data: items,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
