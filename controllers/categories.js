@@ -1,4 +1,4 @@
-const { Category, SubCategory } = require('../models')
+const { Item, Category, SubCategory } = require('../models')
 
 exports.all = async (req, res, next) => {
     try {
@@ -44,9 +44,19 @@ exports.single = async (req, res, next) => {
 }
 
 exports.itemsByCategory = async (req, res, next) => {
-    const { category } = req.params
-
+    const { categoryName } = req.params
     try {
+        const category = await Category.findOne({
+            where: { name: categoryName },
+        })
+
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found!',
+            })
+        }
+
         const items = await Item.findAll({
             include: [
                 {
@@ -57,13 +67,12 @@ exports.itemsByCategory = async (req, res, next) => {
                         {
                             model: Category,
                             as: 'category',
-                            where: { name: category },
+                            where: { name: categoryName },
                         },
                     ],
                 },
             ],
         })
-
         return res.status(200).json({
             success: true,
             message: `items of ${category} category is fetched.`,

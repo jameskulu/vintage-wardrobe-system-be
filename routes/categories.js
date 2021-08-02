@@ -5,6 +5,6 @@ router.get('/', all)
 
 router.get('/:categoryId', single)
 
-router.get('/:category', itemsByCategory)
+router.get('/items/:categoryName', itemsByCategory)
 
 module.exports = router

@@ -308,7 +308,6 @@ exports.getOrders = async (req, res, next) => {
 }
 
 exports.cancelOrder = async (req, res, next) => {
-    const userId = req.user.id
     const { orderId } = req.params
     try {
         const orderedItem = await Order.findByPk(orderId, {
@@ -319,7 +318,6 @@ exports.cancelOrder = async (req, res, next) => {
                 },
             ],
         })
-        console.log(orderedItem)
         if (!orderedItem) {
             return res.status(400).json({
                 success: false,
