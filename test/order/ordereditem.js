@@ -21,14 +21,14 @@ describe('Renter API', () => {
                 var token = response.body.token;
         
             const item = {
-                startDate = '2021/07/26',
-                endDate = '2021/07/29',
-                phoneNumber = '9842394709',
-                address = 'battisputali',
-                city = 'kathmandu',
-                country = 'nepal',
-                totalPrice = '700',
-                itemId = '234565',
+                startDate : 'starting test',
+                endDate : 'ending test',
+                phoneNumber : '9842394709',
+                address : 'battisputali',
+                city : 'kathmandu',
+                country : 'nepal',
+                totalPrice : '700',
+                itemId : '234565',
             }
             chai.request(server)
                 .post("/api/renter/items/new")
