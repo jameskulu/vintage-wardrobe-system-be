@@ -58,13 +58,37 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Order, {
             onDelete: 'cascade',
             foreignKey: 'userId',
-            as: 'userOrder',
+            as: 'orders',
         })
 
         User.hasMany(models.Item, {
             onDelete: 'cascade',
             foreignKey: 'userId',
             as: 'user',
+        })
+
+        User.hasMany(models.Wishlist, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'wishlist',
+        })
+
+        User.hasMany(models.Review, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'review',
+        })
+
+        User.hasMany(models.ItemReviewed, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'itemReviewed',
+        })
+
+        User.hasMany(models.Comment, {
+            onDelete: 'cascade',
+            foreignKey: 'userId',
+            as: 'comment',
         })
     }
 

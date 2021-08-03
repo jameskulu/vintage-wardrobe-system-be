@@ -22,6 +22,7 @@ app.use('/api/categories', require('./routes/categories'))
 app.use('/api/sub-categories', require('./routes/subCategories'))
 app.use('/api/renter', require('./routes/renters'))
 app.use('/api/orders', require('./routes/orders'))
+app.use('/api/reviews', require('./routes/reviews'))
 
 // Admin routes
 app.use('/api/admin/categories', require('./routes/admin/categories'))
