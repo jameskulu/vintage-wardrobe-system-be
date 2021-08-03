@@ -77,10 +77,10 @@ module.exports = (sequelize, DataTypes) => {
             as: 'review',
         })
 
-        Item.hasMany(models.ItemReviewed, {
+        Item.hasMany(models.ItemReview, {
             onDelete: 'cascade',
             foreignKey: 'itemId',
-            as: 'itemReviewed',
+            as: 'itemReview',
         })
 
         Item.hasMany(models.Comment, {

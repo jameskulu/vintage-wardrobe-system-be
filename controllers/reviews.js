@@ -1,4 +1,4 @@
-const { Item, User, Review, ItemReviewed } = require('../models')
+const { Item, User, Review, ItemReview } = require('../models')
 const { addReviewValidation } = require('../validation/items')
 
 exports.getReview = async (req, res, next) => {
@@ -43,11 +43,11 @@ exports.addReview = async (req, res, next) => {
         })
 
     try {
-        const itemReviewed = await ItemReviewed.findOne({
+        const itemReview = await ItemReview.findOne({
             where: { itemId, userId, isReviewed: false },
         })
 
-        if (!itemReviewed) {
+        if (!itemReview) {
             return res.status(404).json({
                 success: false,
                 message: 'You cannot review on this item!',
@@ -61,7 +61,7 @@ exports.addReview = async (req, res, next) => {
             userId,
         })
 
-        await ItemReviewed.update(
+        await ItemReview.update(
             { isReviewed: true },
             { where: { itemId, userId } }
         )
@@ -75,5 +75,3 @@ exports.addReview = async (req, res, next) => {
         return next(err)
     }
 }
-
-

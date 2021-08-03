@@ -282,21 +282,25 @@ exports.loggedInUser = async (req, res) => {
 exports.getOrders = async (req, res, next) => {
     const userId = req.user.id
     try {
-        const orderedItems = await Order.findAll(
-            {
-                include: [
-                    {
-                        model: Item,
-                        as: 'item',
-                    },
-                    {
-                        model: User,
-                        as: 'user',
-                    },
-                ],
-            },
-            { where: { userId } }
-        )
+        const orderedItems = await Order.findAll({
+            include: [
+                {
+                    model: Item,
+                    as: 'item',
+                    include: [
+                        {
+                            model: User,
+                            as: 'user',
+                        },
+                    ],
+                },
+                {
+                    model: User,
+                    as: 'user',
+                    where: { id: userId },
+                },
+            ],
+        })
         return res.status(200).json({
             success: true,
             message: 'All the ordered items are fetched.',
@@ -356,7 +360,6 @@ exports.getWishlist = async (req, res, next) => {
     const userId = req.user.id
     try {
         const wishlist = await Wishlist.findAll(
-            { where: { userId } },
             {
                 include: [
                     {
@@ -368,7 +371,8 @@ exports.getWishlist = async (req, res, next) => {
                         as: 'item',
                     },
                 ],
-            }
+            },
+            { where: { userId } }
         )
         return res.status(200).json({
             success: true,
@@ -383,6 +387,7 @@ exports.getWishlist = async (req, res, next) => {
 
 exports.addWishlist = async (req, res, next) => {
     const { itemId } = req.body
+    const userId = req.user.id
 
     // Validation
     const { error } = addWishlistValidation(req.body)
@@ -401,6 +406,7 @@ exports.addWishlist = async (req, res, next) => {
             })
 
         const wishlist = await Wishlist.findOne({ where: { userId, itemId } })
+
         if (wishlist)
             return res.status(400).json({
                 success: false,
@@ -422,15 +428,8 @@ exports.addWishlist = async (req, res, next) => {
 }
 
 exports.removeWishlist = async (req, res, next) => {
-    const { itemId } = req.body
-
-    // Validation
-    const { error } = addWishlistValidation(req.body)
-    if (error)
-        return res.status(400).json({
-            success: false,
-            message: error.details[0].message,
-        })
+    const { itemId } = req.params
+    const userId = req.user.id
 
     try {
         const item = await Item.findByPk(itemId)

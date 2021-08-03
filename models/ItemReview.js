@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const ItemReviewed = sequelize.define('ItemReviewed', {
+    const ItemReview = sequelize.define('ItemReview', {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
@@ -13,18 +13,18 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
 
-    ItemReviewed.associate = (models) => {
-        ItemReviewed.belongsTo(models.User, {
+    ItemReview.associate = (models) => {
+        ItemReview.belongsTo(models.User, {
             onDelete: 'cascade',
             foreignKey: 'userId',
             as: 'user',
         })
-        ItemReviewed.belongsTo(models.Item, {
+        ItemReview.belongsTo(models.Item, {
             onDelete: 'cascade',
             foreignKey: 'itemId',
             as: 'item',
         })
     }
 
-    return ItemReviewed
+    return ItemReview
 }
