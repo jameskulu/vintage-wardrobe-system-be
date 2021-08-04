@@ -2,7 +2,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
-const { User, Order, Item, Wishlist } = require('../models')
+const { User, Order, Item, Wishlist, SubCategory } = require('../models')
 const {
     registerValidation,
     activateAccountValidation,
@@ -359,21 +359,25 @@ exports.cancelOrder = async (req, res, next) => {
 exports.getWishlist = async (req, res, next) => {
     const userId = req.user.id
     try {
-        const wishlist = await Wishlist.findAll(
-            {
-                include: [
-                    {
-                        model: User,
-                        as: 'user',
-                    },
-                    {
-                        model: Item,
-                        as: 'item',
-                    },
-                ],
-            },
-            { where: { userId } }
-        )
+        const wishlist = await Wishlist.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                },
+                {
+                    model: Item,
+                    as: 'item',
+                    include: [
+                        {
+                            model: SubCategory,
+                            as: 'subCategory',
+                        },
+                    ],
+                },
+            ],
+            where: { userId },
+        })
         return res.status(200).json({
             success: true,
             message: 'All the available wishlist are fetched.',
