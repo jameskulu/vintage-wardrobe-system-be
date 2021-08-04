@@ -193,6 +193,10 @@ exports.changeOrderStatus = async (req, res, next) => {
                     model: Item,
                     as: 'item',
                 },
+                {
+                    model: User,
+                    as: 'user',
+                },
             ],
         })
 
@@ -238,10 +242,11 @@ exports.changeOrderStatus = async (req, res, next) => {
             })
 
             if (!itemReview) {
-                await ItemReview.create(
-                    { userId, isReviewed: false, itemId: order.item.id },
-                    { where: { id: order.item.id } }
-                )
+                await ItemReview.create({
+                    userId: order.user.id,
+                    isReviewed: false,
+                    itemId: order.item.id,
+                })
             }
         }
 
