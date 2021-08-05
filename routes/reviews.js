@@ -1,6 +1,12 @@
 const router = require('express').Router()
 const { verifyToken } = require('../middleware/authentication')
-const { getReview, addReview } = require('../controllers/reviews')
+const {
+    getReview,
+    addReview,
+    getItemReview,
+} = require('../controllers/reviews')
+
+router.get('/reviewed', verifyToken, getItemReview)
 
 // get all reviews of an item
 router.get('/:itemId', verifyToken, getReview)

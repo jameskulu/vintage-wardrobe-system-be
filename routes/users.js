@@ -48,7 +48,7 @@ router.get('/wishlist', verifyToken, getWishlist)
 // add to wishlist
 router.post('/wishlist/add', verifyToken, addWishlist)
 
-// add to wishlist
-router.delete('/wishlist/remove', verifyToken, removeWishlist)
+// remove from wishlist
+router.delete('/wishlist/remove/:itemId', verifyToken, removeWishlist)
 
 module.exports = router

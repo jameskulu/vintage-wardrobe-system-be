@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
         gender: {
             type: DataTypes.ENUM('ma', 'fe'),
         },
+        profilePicURL: {
+            type: DataTypes.STRING,
+        },
         address: {
             type: DataTypes.STRING,
         },
@@ -79,10 +82,10 @@ module.exports = (sequelize, DataTypes) => {
             as: 'review',
         })
 
-        User.hasMany(models.ItemReviewed, {
+        User.hasMany(models.ItemReview, {
             onDelete: 'cascade',
             foreignKey: 'userId',
-            as: 'itemReviewed',
+            as: 'itemReview',
         })
 
         User.hasMany(models.Comment, {
