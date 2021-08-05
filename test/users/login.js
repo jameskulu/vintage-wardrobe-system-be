@@ -10,8 +10,8 @@ describe('Login API', () => {
     describe('POST /api/users/login', () => {
         it('It should login user', (done) => {
             const loginUser = {
-                email: 'arbin@gmail.com',
-                password: 'arbinchau',
+                email: 'rijan22shrestha@gmail.com',
+                password: '$2a$10$zJdkYpdPFAoYxJSVvpRJvei6GqVmLEQvrnlfFlO4LKv0LL5lqMHEq',
             }
             chai.request(server)
                 .post('/api/users/login')
