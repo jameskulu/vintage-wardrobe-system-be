@@ -12,7 +12,7 @@ describe('Renter API', () => {
             const orderId = '234';
             const userId = '543';
             chai.request(server)
-                .delete('/api/renter/items/delete/' + orderId + userId)
+                .delete('/api/users/orders/:orderId/cancel' + orderId + userId)
                 .end((err, response) => {
                     response.should.have.status(200)
                     done()
