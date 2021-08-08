@@ -7,10 +7,10 @@ chai.should()
 chai.use(chaiHttp)
 
 describe('Category API', () => {
-    describe('GET /api/categories', () => {
-        it('It should get all the categories', (done) => {
+    describe('GET /api/sub-categories', () => {
+        it('It should get all the Subcategories', (done) => {
             chai.request(server)
-                .get('/api/categories/')
+                .get('/api/sub-categories/')
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -22,11 +22,11 @@ describe('Category API', () => {
         })
     })
 
-    describe('GET /api/categories/:categoryId', () => {
+    describe('GET /api/sub-categories/:categoryId', () => {
         it('It should get a single category', (done) => {
-            const categoryId = '456783sha7823hs'
+            const subCategoryId = 'asfjake12345'
             chai.request(server)
-                .get('/api/categories/' + categoryId)
+                .get('/api/sub-categories/' + subCategoryId)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -38,19 +38,4 @@ describe('Category API', () => {
         })
     })
 
-    describe('GET /api/categories/items/:categoryName', () => {
-        it('It should get a single product', (done) => {
-            const categoryName = 'Shirt'
-            chai.request(server)
-                .get('/api/categories/items/:categoryName/' + categoryName)
-                .end((err, response) => {
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
-                })
-        })
-    })
 })
