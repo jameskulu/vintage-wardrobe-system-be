@@ -10,6 +10,7 @@ const {
     forgotPasswordValidation,
     resetPasswordValidation,
     addWishlistValidation,
+    changePasswordValidation,
 } = require('../validation/users')
 const { sendEmail } = require('../config/mail')
 
@@ -458,6 +459,110 @@ exports.removeWishlist = async (req, res, next) => {
             success: true,
             message: 'Wishlist was removed.',
             data: deletedWishlist,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.getProfile = async (req, res, next) => {
+    const userId = req.user.id
+    try {
+        const user = await User.findOne({
+            where: { id: userId },
+        })
+
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'User not found',
+            })
+
+        return res.status(200).json({
+            success: true,
+            message: 'User information is fetched.',
+            data: user,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.editProfile = async (req, res, next) => {
+    const userId = req.user.id
+    const { firstName, lastName, gender, address, city, country } = req.body
+
+    try {
+        const user = await User.findOne({
+            where: { id: userId },
+        })
+
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'User not found',
+            })
+
+        const updatedUser = await user.update({
+            firstName,
+            lastName,
+            gender,
+            address,
+            city,
+            country,
+        })
+        return res.status(200).json({
+            success: true,
+            message: 'User was updated.',
+            data: updatedUser,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
+exports.changePassword = async (req, res, next) => {
+    const userId = req.user.id
+    const { oldPassword, newPassword } = req.body
+
+    // Validation
+    const { error } = changePasswordValidation(req.body)
+    if (error)
+        return res.status(400).json({
+            success: false,
+            message: error.details[0].message,
+        })
+
+    try {
+        const user = await User.findOne({
+            where: { id: userId },
+        })
+
+        if (!user)
+            return res.status(400).json({
+                success: false,
+                message: 'User not found',
+            })
+
+        const isPassword = await bcrypt.compare(oldPassword, user.password)
+        if (!isPassword)
+            return res.status(400).json({
+                success: false,
+                message: 'Your old password did not match.',
+            })
+
+        // Generating hashed password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(newPassword, salt)
+
+        const updatedUser = await user.update({
+            password: hashedPassword,
+        })
+
+        return res.status(200).json({
+            success: true,
+            message: 'User was updated.',
+            data: updatedUser,
         })
     } catch (err) {
         return next(err)

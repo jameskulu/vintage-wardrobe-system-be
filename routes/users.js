@@ -13,6 +13,9 @@ const {
     getWishlist,
     addWishlist,
     removeWishlist,
+    getProfile,
+    editProfile,
+    changePassword,
 } = require('../controllers/users')
 
 // User registration
@@ -42,7 +45,7 @@ router.get('/orders', verifyToken, getOrders)
 // Cancel order
 router.delete('/orders/:orderId/cancel', verifyToken, cancelOrder)
 
-// add to wishlist
+// get all wishlist of logged in user
 router.get('/wishlist', verifyToken, getWishlist)
 
 // add to wishlist
@@ -50,5 +53,12 @@ router.post('/wishlist/add', verifyToken, addWishlist)
 
 // remove from wishlist
 router.delete('/wishlist/remove/:itemId', verifyToken, removeWishlist)
+
+// get logged in user
+router.get('/profile', verifyToken, getProfile)
+
+router.put('/profile/edit', verifyToken, editProfile)
+
+router.put('/profile/change-password', verifyToken, changePassword)
 
 module.exports = router
