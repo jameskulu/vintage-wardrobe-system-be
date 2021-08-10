@@ -43,6 +43,36 @@ exports.single = async (req, res, next) => {
     }
 }
 
+exports.singleByName = async (req, res, next) => {
+    const { categoryName } = req.params
+
+    try {
+        const singleCategory = await Category.findOne({
+            where: { name: categoryName },
+            include: [
+                {
+                    model: SubCategory,
+                    as: 'category',
+                },
+            ],
+        })
+
+        if (!singleCategory)
+            return res.status(404).json({
+                success: false,
+                message: 'Category not found!',
+            })
+
+        return res.status(200).json({
+            success: true,
+            message: 'Single category is fetched.',
+            data: singleCategory,
+        })
+    } catch (err) {
+        return next(err)
+    }
+}
+
 exports.itemsByCategory = async (req, res, next) => {
     const { categoryName } = req.params
     try {
