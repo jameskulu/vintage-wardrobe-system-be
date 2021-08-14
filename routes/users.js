@@ -17,6 +17,7 @@ const {
     editProfile,
     changePassword,
 } = require('../controllers/users')
+const upload = require('../utils/multer')
 
 // User registration
 router.post('/register', register)
@@ -57,7 +58,7 @@ router.delete('/wishlist/remove/:itemId', verifyToken, removeWishlist)
 // get logged in user
 router.get('/profile', verifyToken, getProfile)
 
-router.put('/profile/edit', verifyToken, editProfile)
+router.put('/profile/edit', verifyToken, upload.single('image'), editProfile)
 
 router.put('/profile/change-password', verifyToken, changePassword)
 

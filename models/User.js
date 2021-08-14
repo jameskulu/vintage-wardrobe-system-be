@@ -29,6 +29,9 @@ module.exports = (sequelize, DataTypes) => {
         profilePicURL: {
             type: DataTypes.STRING,
         },
+        cloudinaryId: {
+            type: DataTypes.STRING,
+        },
         address: {
             type: DataTypes.STRING,
         },
