@@ -1,5 +1,5 @@
 const { Op } = require('sequelize')
-const { Item, User, SubCategory } = require('../models')
+const { Item, User, SubCategory, ItemImage } = require('../models')
 const { createValidation } = require('../validation/items')
 
 exports.search = async (req, res) => {
@@ -38,6 +38,10 @@ exports.all = async (req, res, next) => {
                     model: SubCategory,
                     as: 'subCategory',
                 },
+                {
+                    model: ItemImage,
+                    as: 'images',
+                },
             ],
         })
         return res.status(200).json({
@@ -64,6 +68,10 @@ exports.single = async (req, res, next) => {
                 {
                     model: SubCategory,
                     as: 'subCategory',
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
                 },
             ],
         })

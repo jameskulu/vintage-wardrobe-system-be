@@ -493,7 +493,6 @@ exports.editProfile = async (req, res, next) => {
     const userId = req.user.id
     let result = null
     const { firstName, lastName, gender, address, city, country } = req.body
-
     try {
         const user = await User.findOne({
             where: { id: userId },

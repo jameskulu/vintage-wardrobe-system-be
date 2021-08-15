@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
         ItemImage.belongsTo(models.Item, {
             onDelete: 'cascade',
             foreignKey: 'itemId',
-            as: 'images',
+            as: 'item',
         })
     }
 
