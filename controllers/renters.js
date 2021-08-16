@@ -12,7 +12,6 @@ const {
 } = require('../validation/renters')
 const cloudinary = require('../utils/cloudinary')
 
-
 exports.getUploadedItems = async (req, res, next) => {
     const userId = req.user.id
     try {
@@ -32,8 +31,6 @@ exports.create = async (req, res, next) => {
     const { name, description, price, size, color, subCategoryId } = req.body
     const userId = req.user.id
     let result = null
-    console.log(req.files)
-    console.log(req.body)
 
     // Validation
     const { error } = createValidation(req.body)

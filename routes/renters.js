@@ -14,7 +14,7 @@ const upload = require('../utils/multer')
 router.get('/items', verifyToken, getUploadedItems)
 
 // upload item
-router.post('/items/new', verifyToken, upload.array('images', 5), create)
+router.post('/items/new', verifyToken, upload.array('images', 3), create)
 
 // edit item
 router.put('/items/update/:itemId', verifyToken, update)
