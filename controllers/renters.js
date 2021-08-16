@@ -1,8 +1,17 @@
-const { User, Order, Item, SubCategory, ItemReview } = require('../models')
+const {
+    User,
+    Order,
+    Item,
+    SubCategory,
+    ItemReview,
+    ItemImage,
+} = require('../models')
 const {
     createValidation,
     orderStatusValidation,
 } = require('../validation/renters')
+const cloudinary = require('../utils/cloudinary')
+
 
 exports.getUploadedItems = async (req, res, next) => {
     const userId = req.user.id
@@ -22,6 +31,9 @@ exports.getUploadedItems = async (req, res, next) => {
 exports.create = async (req, res, next) => {
     const { name, description, price, size, color, subCategoryId } = req.body
     const userId = req.user.id
+    let result = null
+    console.log(req.files)
+    console.log(req.body)
 
     // Validation
     const { error } = createValidation(req.body)
@@ -58,6 +70,27 @@ exports.create = async (req, res, next) => {
             //     ],
             // }
         )
+
+        // if (result !== null) {
+        //     try {
+        //         await cloudinary.uploader.destroy(user.cloudinaryId)
+        //     } catch (err) {
+        //         //
+        //     }
+        // }
+
+        if (req.files) {
+            console.log(req.files)
+            req.files.map(async (file) => {
+                result = await cloudinary.uploader.upload(file.path)
+                await ItemImage.create({
+                    imageURL: result.secure_url,
+                    cloudinaryId: result.public_id,
+                    itemId: createdItem.id,
+                })
+            })
+        }
+
         return res.status(200).json({
             success: true,
             message: 'New item was added.',

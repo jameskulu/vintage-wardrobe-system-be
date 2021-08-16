@@ -8,12 +8,13 @@ const {
     getOrders,
     changeOrderStatus,
 } = require('../controllers/renters')
+const upload = require('../utils/multer')
 
 // get all uploaded items
 router.get('/items', verifyToken, getUploadedItems)
 
 // upload item
-router.post('/items/new', verifyToken, create)
+router.post('/items/new', verifyToken, upload.array('images', 5), create)
 
 // edit item
 router.put('/items/update/:itemId', verifyToken, update)

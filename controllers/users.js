@@ -2,6 +2,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
+const cloudinary = require('../utils/cloudinary')
 const { User, Order, Item, Wishlist, SubCategory } = require('../models')
 const {
     registerValidation,
@@ -490,8 +491,8 @@ exports.getProfile = async (req, res, next) => {
 
 exports.editProfile = async (req, res, next) => {
     const userId = req.user.id
+    let result = null
     const { firstName, lastName, gender, address, city, country } = req.body
-
     try {
         const user = await User.findOne({
             where: { id: userId },
@@ -503,6 +504,18 @@ exports.editProfile = async (req, res, next) => {
                 message: 'User not found',
             })
 
+        if (req.file) {
+            result = await cloudinary.uploader.upload(req.file.path)
+        }
+
+        if (result !== null) {
+            try {
+                await cloudinary.uploader.destroy(user.cloudinaryId)
+            } catch (err) {
+                //
+            }
+        }
+
         const updatedUser = await user.update({
             firstName,
             lastName,
@@ -510,6 +523,10 @@ exports.editProfile = async (req, res, next) => {
             address,
             city,
             country,
+            profilePicURL:
+                result === null ? user.profilePicURL : result.secure_url,
+            cloudinaryId:
+                result === null ? user.cloudinaryId : result.public_id,
         })
         return res.status(200).json({
             success: true,
