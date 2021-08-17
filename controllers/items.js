@@ -6,6 +6,20 @@ exports.search = async (req, res) => {
     const { q } = req.query
     try {
         const searchedItems = await Item.findAll({
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
+                },
+            ],
             where: {
                 name: {
                     [Op.like]: `%${q}%`,
