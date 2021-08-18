@@ -3,7 +3,14 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
 const cloudinary = require('../utils/cloudinary')
-const { User, Order, Item, Wishlist, SubCategory } = require('../models')
+const {
+    User,
+    Order,
+    Item,
+    Wishlist,
+    SubCategory,
+    ItemImage,
+} = require('../models')
 const {
     registerValidation,
     activateAccountValidation,
