@@ -14,6 +14,9 @@ exports.createValidation = (data) => {
         password: Joi.string().min(6).required(),
         role: Joi.string().valid('admin', 'user').required(),
         gender: Joi.string().valid('ma', 'fe'),
+        address: Joi.string().allow(''),
+        city: Joi.string().allow(''),
+        country: Joi.string().allow(''),
     })
     return schema.validate(data)
 }

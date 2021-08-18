@@ -133,27 +133,35 @@ exports.update = async (req, res, next) => {
 
         if (result !== null) {
             try {
-                await cloudinary.uploader.destroy(user.cloudinaryId)
+                await cloudinary.uploader.destroy(singleUser.cloudinaryId)
             } catch (err) {
                 //
             }
         }
+
+        // Generating hashed password
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
 
         const updatedUser = await User.update(
             {
                 firstName,
                 lastName,
                 email,
-                password,
+                password: hashedPassword,
                 role,
                 gender,
                 address,
                 city,
                 country,
                 profilePicURL:
-                    result === null ? user.profilePicURL : result.secure_url,
+                    result === null
+                        ? singleUser.profilePicURL
+                        : result.secure_url,
                 cloudinaryId:
-                    result === null ? user.cloudinaryId : result.public_id,
+                    result === null
+                        ? singleUser.cloudinaryId
+                        : result.public_id,
             },
             { where: { id: userId } }
         )
