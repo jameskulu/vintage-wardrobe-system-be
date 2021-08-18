@@ -15,7 +15,23 @@ const cloudinary = require('../utils/cloudinary')
 exports.getUploadedItems = async (req, res, next) => {
     const userId = req.user.id
     try {
-        const items = await Item.findAll({ where: { userId } })
+        const items = await Item.findAll({
+            where: { userId },
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
+                },
+            ],
+        })
         return res.status(200).json({
             success: true,
             message: 'All the uploaded items are fetched.',
@@ -187,6 +203,14 @@ exports.getOrders = async (req, res, next) => {
                             where: {
                                 id: userId,
                             },
+                        },
+                        {
+                            model: SubCategory,
+                            as: 'subCategory',
+                        },
+                        {
+                            model: ItemImage,
+                            as: 'images',
                         },
                     ],
                 },

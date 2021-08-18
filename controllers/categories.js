@@ -1,4 +1,4 @@
-const { Item, Category, SubCategory } = require('../models')
+const { Item, Category, SubCategory, ItemImage } = require('../models')
 
 exports.all = async (req, res, next) => {
     try {
@@ -100,6 +100,10 @@ exports.itemsByCategory = async (req, res, next) => {
                             where: { name: categoryName },
                         },
                     ],
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
                 },
             ],
         })
