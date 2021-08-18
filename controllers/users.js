@@ -375,6 +375,14 @@ exports.getWishlist = async (req, res, next) => {
                             model: SubCategory,
                             as: 'subCategory',
                         },
+                        {
+                            model: User,
+                            as: 'user',
+                        },
+                        {
+                            model: ItemImage,
+                            as: 'images',
+                        },
                     ],
                 },
             ],
