@@ -1,4 +1,4 @@
-const { Item, User, ItemImage } = require('../../models')
+const { Item, User, ItemImage, SubCategory } = require('../../models')
 const { createValidation } = require('../../validation/admin/items')
 const cloudinary = require('../../utils/cloudinary')
 
@@ -9,6 +9,14 @@ exports.all = async (req, res, next) => {
                 {
                     model: User,
                     as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
                 },
             ],
         })
@@ -32,6 +40,14 @@ exports.single = async (req, res, next) => {
                 {
                     model: User,
                     as: 'user',
+                },
+                {
+                    model: SubCategory,
+                    as: 'subCategory',
+                },
+                {
+                    model: ItemImage,
+                    as: 'images',
                 },
             ],
         })
