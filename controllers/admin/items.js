@@ -69,8 +69,8 @@ exports.single = async (req, res, next) => {
 }
 
 exports.create = async (req, res, next) => {
-    const { name, description, price, color, size, subCategoryId, userId } =
-        req.body
+    const userId = req.user.id
+    const { name, description, price, color, size, subCategoryId } = req.body
     let result = null
 
     // Validation
