@@ -1,26 +1,23 @@
 const chai = require('chai')
 const chaiHttp = require('chai-http')
-
 const server = require('../../server')
 
+// Assertion Style
 chai.should()
 chai.use(chaiHttp)
 
-describe('Renter API', () => {
-    let token
-    describe('POST /api/renter/orders/:orderId/status', () => {
-        it('It should change status order', (done) => {
-            const status = {
-                orderId: '21b2b7dc-c56b-44a6-bcd0-677255d78888',
-                status: 'received',
-                userId: 'a3abc90c-e5df-4beb-a50b-6b7236011485',
-                
+describe('Profile API', () => {
+    describe('PUT /api/users/profile/change-password', () => {
+        it('It should be able to change profile password', (done) => { 
+            const userId = '0caf42e4-e5c9-4d43-9443-a6be8a09135f';
+            const changepw = {
+                oldPassword : '$2a$10$Ikj89Rsv.YIeMC/lKV5hnunwN5o/a7muyffabyBKJLDBFWogel9Qa',
+                newPassword :'arch12345',  
             }
             chai.request(server)
-                .post('/api/renter/orders/:orderId/status')
-                .send(status)
+                .put('/api/users/profile/change-password/' + userId)
+                .send(changepw)
                 .end((err, response) => {
-                    token = response.body.data.emailToken || ''
                     response.should.have.status(200)
                     response.body.should.be.a('object')
                     response.body.should.have.property('success')

@@ -6,7 +6,7 @@ const server = require('../../server')
 chai.should()
 chai.use(chaiHttp)
 
-describe('Renter API', () => {
+describe('Order API', () => {
 
     describe('GET /api/users/orders', () => {
         it("It should get ordered items",(done)=>{

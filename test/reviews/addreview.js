@@ -21,9 +21,9 @@ describe('Review API', () => {
                 var token = response.body.token;
         
             const review = {
-                text:"asdfghj",
-                rating:"two star",         
-                itemId:"2345y",
+                text:"Nice quality",
+                rating:"4",         
+                itemId:"447f4854-bcb3-4b45-bd20-b372e9b8ca56",
             }
             chai.request(server)
                 .post("/api/reviews/new")

@@ -8,7 +8,7 @@ chai.use(chaiHttp)
 describe('Profile API', () => {
     describe('GET /api/users/profile', () => {
         it('It should get profile of user', (done) => {
-            const userId = '456783sha7823hs'
+            const userId = 'eb184a2a-3ae2-4b02-abec-32306617d3de'
             chai.request(server)
                 .get('/api/users/profile/' + userId)
                 .end((err, response) => {

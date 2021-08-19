@@ -9,13 +9,13 @@ chai.use(chaiHttp)
 describe('Profile API', () => {
     describe('PUT /api/users/profile/edit', () => {
         it('It should be able to edit profile', (done) => { 
-            const userId = 3487;
+            const userId = 'eb184a2a-3ae2-4b02-abec-32306617d3de';
             const editprof = {
-                firstName : 'rghsjd',
-                lastName :'this is for renting clothes',  
-                gender : 'Rs1000',
-                address : 'T-shirt',
-                city : 'ktm',
+                firstName : 'James',
+                lastName :'Kulu',  
+                gender : 'ma',
+                address : 'dfsdf',
+                city : 'kathmandu',
                 country : 'Nepal',
             }
             chai.request(server)
