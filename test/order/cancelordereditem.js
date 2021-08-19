@@ -6,11 +6,11 @@ const server = require('../../server')
 chai.should()
 chai.use(chaiHttp)
 
-describe('Renter API', () => {
+describe('Order API', () => {
     describe('Delete /api/users/orders/:orderId/cancel', () => {
         it('It should be able to delete cart item', (done) => {
-            const orderId = '234';
-            const userId = '543';
+            const orderId = 'bf01b5f8-2453-4e8b-8377-3eeee0d6d673';
+            const userId = '057c5512-d6b0-4d5d-8215-9fc37f4ff0bd';
             chai.request(server)
                 .delete('/api/users/orders/:orderId/cancel' + orderId + userId)
                 .end((err, response) => {

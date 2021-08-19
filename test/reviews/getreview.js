@@ -9,7 +9,7 @@ chai.use(chaiHttp)
 describe('Review API', () => {
     describe('GET /api/reviews', () => {
         it('It should get a review', (done) => {
-            const itemId = 'jk313'
+            const itemId = 'c2945cf9-8f66-48fd-84f1-7ec6978bcefa'
             chai.request(server)
                 .get('/api/reviews/:itemId/' + itemId)
                 .end((err, response) => {

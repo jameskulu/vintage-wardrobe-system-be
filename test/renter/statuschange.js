@@ -11,9 +11,9 @@ describe('Renter API', () => {
     describe('POST /api/renter/orders/:orderId/status', () => {
         it('It should change status order', (done) => {
             const status = {
-                orderId: '234fgh',
-                status: 'chaudhary',
-                userId: '876fmhn',
+                orderId: '21b2b7dc-c56b-44a6-bcd0-677255d78888',
+                status: 'received',
+                userId: 'a3abc90c-e5df-4beb-a50b-6b7236011485',
                 
             }
             chai.request(server)

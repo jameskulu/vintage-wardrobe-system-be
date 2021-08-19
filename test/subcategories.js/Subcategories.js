@@ -24,7 +24,7 @@ describe('Category API', () => {
 
     describe('GET /api/sub-categories/:categoryId', () => {
         it('It should get a single category', (done) => {
-            const subCategoryId = 'asfjake12345'
+            const subCategoryId = '93a82fda-9e0c-4797-bd3d-b973438e3ce4'
             chai.request(server)
                 .get('/api/sub-categories/' + subCategoryId)
                 .end((err, response) => {
