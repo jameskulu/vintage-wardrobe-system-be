@@ -25,6 +25,8 @@ app.use('/api/orders', require('./routes/orders'))
 app.use('/api/reviews', require('./routes/reviews'))
 
 // Admin routes
+app.use('/api/admin/users', require('./routes/admin/users'))
+app.use('/api/admin/items', require('./routes/admin/items'))
 app.use('/api/admin/categories', require('./routes/admin/categories'))
 app.use('/api/admin/sub-categories', require('./routes/admin/subCategories'))
 
