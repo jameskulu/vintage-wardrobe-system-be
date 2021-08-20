@@ -8,6 +8,7 @@ exports.createValidation = (data) => {
         color: Joi.string().required(),
         size: Joi.string().required(),
         subCategoryId: Joi.string().required(),
+        images: Joi.required(),
     })
     return schema.validate(data)
 }

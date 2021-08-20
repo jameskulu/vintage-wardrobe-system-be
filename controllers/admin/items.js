@@ -72,6 +72,7 @@ exports.create = async (req, res, next) => {
     const userId = req.user.id
     const { name, description, price, color, size, subCategoryId } = req.body
     let result = null
+    console.log(req.files)
 
     // Validation
     const { error } = createValidation(req.body)
@@ -125,11 +126,11 @@ exports.create = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     const { itemId } = req.params
-    const userId = req.user.id
     const { name, description, price, color, size } = req.body
-
     try {
-        const singleItem = await Item.findByPk(itemId)
+        const singleItem = await Item.findOne({
+            where: { id: itemId },
+        })
 
         if (!singleItem)
             return res.status(404).json({
