@@ -125,8 +125,8 @@ exports.create = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     const { itemId } = req.params
-    const { name, description, price, color, size, subCategoryId, userId } =
-        req.body
+    const userId = req.user.id
+    const { name, description, price, color, size } = req.body
 
     try {
         const singleItem = await Item.findByPk(itemId)
@@ -137,10 +137,14 @@ exports.update = async (req, res, next) => {
                 message: 'Item not found!',
             })
 
-        const updatedItem = await Item.update(
-            { name, description, price, color, size, subCategoryId, userId },
-            { where: { id: itemId } }
-        )
+        const updatedItem = await singleItem.update({
+            name,
+            description,
+            price,
+            color,
+            size,
+        })
+
         return res.status(200).json({
             success: true,
             message: 'Item was updated.',
