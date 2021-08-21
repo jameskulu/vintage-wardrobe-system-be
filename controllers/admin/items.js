@@ -72,6 +72,7 @@ exports.create = async (req, res, next) => {
     const userId = req.user.id
     const { name, description, price, color, size, subCategoryId } = req.body
     let result = null
+    console.log(req.files)
 
     // Validation
     const { error } = createValidation(req.body)
@@ -125,11 +126,11 @@ exports.create = async (req, res, next) => {
 
 exports.update = async (req, res, next) => {
     const { itemId } = req.params
-    const { name, description, price, color, size, subCategoryId, userId } =
-        req.body
-
+    const { name, description, price, color, size } = req.body
     try {
-        const singleItem = await Item.findByPk(itemId)
+        const singleItem = await Item.findOne({
+            where: { id: itemId },
+        })
 
         if (!singleItem)
             return res.status(404).json({
@@ -137,10 +138,14 @@ exports.update = async (req, res, next) => {
                 message: 'Item not found!',
             })
 
-        const updatedItem = await Item.update(
-            { name, description, price, color, size, subCategoryId, userId },
-            { where: { id: itemId } }
-        )
+        const updatedItem = await singleItem.update({
+            name,
+            description,
+            price,
+            color,
+            size,
+        })
+
         return res.status(200).json({
             success: true,
             message: 'Item was updated.',

@@ -1,9 +1,16 @@
-const { SubCategory } = require('../../models')
+const { SubCategory, Category } = require('../../models')
 const { createValidation } = require('../../validation/admin/subCategories')
 
 exports.all = async (req, res, next) => {
     try {
-        const subCategory = await SubCategory.findAll()
+        const subCategory = await SubCategory.findAll({
+            include: [
+                {
+                    model: Category,
+                    as: 'category',
+                },
+            ],
+        })
         return res.status(200).json({
             success: true,
             message: 'All the available sub categories are fetched.',
@@ -19,7 +26,17 @@ exports.single = async (req, res, next) => {
     const { subCategoryId } = req.params
 
     try {
-        const singleSubCategory = await SubCategory.findByPk(subCategoryId)
+        const singleSubCategory = await SubCategory.findOne({
+            where: {
+                id: subCategoryId,
+            },
+            include: [
+                {
+                    model: Category,
+                    as: 'category',
+                },
+            ],
+        })
 
         if (!singleSubCategory)
             return res.status(404).json({

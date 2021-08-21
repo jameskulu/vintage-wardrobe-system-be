@@ -93,7 +93,6 @@ exports.create = async (req, res, next) => {
         // }
 
         if (req.files) {
-            console.log(req.files)
             req.files.map(async (file) => {
                 result = await cloudinary.uploader.upload(file.path)
                 await ItemImage.create({
