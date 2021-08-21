@@ -7,10 +7,10 @@ chai.should()
 chai.use(chaiHttp)
 
 describe('AdminPanel API', () => {
-    describe('GET /api/admin/categories', () => {
-        it('It should get all the categories', (done) => {
+    describe('GET /api/admin/sub-categories', () => {
+        it('It should get all the sub-categories', (done) => {
             chai.request(server)
-                .get('/api/admin/categories/')
+                .get('/api/admin/sub-categories/')
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -22,11 +22,11 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('GET /api/admin/categories', () => {
-        it('It should get a single category by categoryid', (done) => {
-            const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c'
+    describe('GET /api/admin/sub-categories', () => {
+        it('It should get a single subcategory by sub-categoryid', (done) => {
+            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c'
             chai.request(server)
-                .get('/api/admin/categories/:categoryId/' + categoryId)
+                .get('/api/admin/sub-categories/:subCategoryId/' + subCategoryId)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -38,8 +38,8 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('POST /api/admin/categories', () => {
-        it('It should login get a token and post a new category', (done) => {
+    describe('POST /api/admin/sub-categories', () => {
+        it('It should login get a token and post a new sub-category', (done) => {
             chai.request(server)
                 .post('/api/users/login')
                 .send({
@@ -51,8 +51,9 @@ describe('AdminPanel API', () => {
                     var token = response.body.token
 
                     const name = 'Women';
+                    const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
                     chai.request(server)
-                        .post('/api/admin/categories/new')
+                        .post('/api/admin/sub-categories/new/' + categoryId)
                         .set('Authorization', 'Bearer ' + token)
                         .send(name)
                         .end((err, response) => {
@@ -67,13 +68,16 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('PUT /api/admin/categories', () => {
-        it('It should be able to update categories', (done) => {
-            const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
-            const name = 'Women';
+    describe('PUT /api/admin/sub-categories', () => {
+        it('It should be able to update sub-categories', (done) => {
+            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
+            const updatedSC = {
+                name = 'Women',
+                categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c',
+            }
             chai.request(server)
-                .put('/api/admin/categories/update/:categoryId' + categoryId)
-                .send(name)
+                .put('/api/admin/sub-categories/update/:subCategoryId' + subCategoryId + categoryId)
+                .send(updatedSC)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -85,11 +89,11 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('Delete /api/admin/categories', () => {
-        it('It should be able to delete categories', (done) => {
-            const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
+    describe('Delete /api/admin/sub-categories', () => {
+        it('It should be able to delete sub-categories', (done) => {
+            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
             chai.request(server)
-                .delete('/api/admin/categories/delete/:categoryId/'+ categoryId)
+                .delete('/api/admin/sub-categories/delete/:subCategoryId/'+ subCategoryId)
                 .end((err, response) => {
                     response.should.have.status(200)
                     done()
