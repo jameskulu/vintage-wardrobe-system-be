@@ -117,7 +117,7 @@ exports.remove = async (req, res, next) => {
             })
 
         const deletedSubCategory = await SubCategory.destroy({
-            where: { id: categoryId },
+            where: { id: subCategoryId },
         })
 
         return res.status(200).json({
