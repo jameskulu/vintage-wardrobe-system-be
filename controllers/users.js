@@ -298,8 +298,16 @@ exports.getOrders = async (req, res, next) => {
                     as: 'item',
                     include: [
                         {
+                            model: SubCategory,
+                            as: 'subCategory',
+                        },
+                        {
                             model: User,
                             as: 'user',
+                        },
+                        {
+                            model: ItemImage,
+                            as: 'images',
                         },
                     ],
                 },
