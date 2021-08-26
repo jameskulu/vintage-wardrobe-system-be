@@ -33,7 +33,7 @@ exports.single = async (req, res, next) => {
             return res.status(404).json({
                 success: false,
                 message: 'Category not found!',
-            })
+            }) 
 
         return res.status(200).json({
             success: true,
