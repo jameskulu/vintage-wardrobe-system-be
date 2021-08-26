@@ -2,7 +2,9 @@ const { Item, Category, SubCategory, ItemImage } = require('../models')
 
 exports.all = async (req, res, next) => {
     try {
-        const category = await Category.findAll()
+        const category = await Category.findAll({
+            order: [['createdAt', 'DESC']],
+        })
         return res.status(200).json({
             success: true,
             message: 'All the available categories are fetched.',
@@ -88,6 +90,7 @@ exports.itemsByCategory = async (req, res, next) => {
         }
 
         const items = await Item.findAll({
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: SubCategory,

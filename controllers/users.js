@@ -144,13 +144,14 @@ exports.login = async (req, res, next) => {
                 message: 'Invalid credentials.',
             })
 
-        const payload = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
-        }
+        // const payload = {
+        //     id: user.id,
+        //     firstName: user.firstName,
+        //     lastName: user.lastName,
+        //     email: user.email,
+        //     role: user.role,
+        //     profilePicURL: user.profilePicURL,
+        // }
 
         // Assigning a token
         const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET)
@@ -159,7 +160,7 @@ exports.login = async (req, res, next) => {
             success: true,
             message: 'You are now logged in.',
             token,
-            data: payload,
+            data: user,
         })
     } catch (err) {
         return next(err)
@@ -402,6 +403,7 @@ exports.getWishlist = async (req, res, next) => {
                 },
             ],
             where: { userId },
+            order: [['createdAt', 'DESC']],
         })
         return res.status(200).json({
             success: true,

@@ -14,6 +14,7 @@ exports.getItemReview = async (req, res, next) => {
                     as: 'item',
                 },
             ],
+            order: [['createdAt', 'DESC']],
         })
         return res.status(200).json({
             success: true,
@@ -41,6 +42,7 @@ exports.getReview = async (req, res, next) => {
                     as: 'item',
                 },
             ],
+            order: [['createdAt', 'DESC']],
         })
         return res.status(200).json({
             success: true,

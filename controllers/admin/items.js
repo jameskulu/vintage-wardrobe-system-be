@@ -5,6 +5,7 @@ const cloudinary = require('../../utils/cloudinary')
 exports.all = async (req, res, next) => {
     try {
         const items = await Item.findAll({
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: User,

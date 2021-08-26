@@ -4,6 +4,7 @@ const { createValidation } = require('../../validation/admin/subCategories')
 exports.all = async (req, res, next) => {
     try {
         const subCategory = await SubCategory.findAll({
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: Category,

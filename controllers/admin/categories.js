@@ -3,7 +3,9 @@ const { createValidation } = require('../../validation/admin/categories')
 
 exports.all = async (req, res, next) => {
     try {
-        const category = await Category.findAll()
+        const category = await Category.findAll({
+            order: [['createdAt', 'DESC']],
+        })
         return res.status(200).json({
             success: true,
             message: 'All the available categories are fetched.',

@@ -17,6 +17,7 @@ exports.getUploadedItems = async (req, res, next) => {
     try {
         const items = await Item.findAll({
             where: { userId },
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: User,
@@ -185,6 +186,7 @@ exports.getOrders = async (req, res, next) => {
     const userId = req.user.id
     try {
         const orderedItems = await Order.findAll({
+            order: [['createdAt', 'DESC']],
             include: [
                 {
                     model: User,
