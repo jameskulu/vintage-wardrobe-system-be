@@ -16,7 +16,13 @@ router.get('/:itemId', verifyToken, isAdmin, single)
 
 router.post('/new', verifyToken, isAdmin, upload.array('images', 3), create)
 
-router.put('/update/:itemId', verifyToken, isAdmin, update)
+router.put(
+    '/update/:itemId',
+    verifyToken,
+    isAdmin,
+    upload.array('images', 3),
+    update
+)
 
 router.delete('/delete/:itemId', verifyToken, isAdmin, remove)
 

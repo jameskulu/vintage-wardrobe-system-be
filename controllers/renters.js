@@ -119,6 +119,8 @@ exports.update = async (req, res, next) => {
     const userId = req.user.id
     const { name, description, price, size, color } = req.body
 
+    console.log(req.files)
+
     try {
         const singleItem = await Item.findByPk(itemId)
 
@@ -135,10 +137,34 @@ exports.update = async (req, res, next) => {
                     'Access denied ! Only creator of this item can update.',
             })
 
-        const updatedItem = await Item.update(
-            { name, description, price, size, color },
-            { where: { id: itemId } }
-        )
+        const updatedItem = await singleItem.update({
+            name,
+            description,
+            price,
+            size,
+            color,
+        })
+
+        if (req.files && req.files.length > 0) {
+            const images = await ItemImage.findAll({ where: { itemId } })
+            images.map(async (image) => {
+                await cloudinary.uploader.destroy(image.cloudinaryId)
+            })
+
+            await ItemImage.destroy({
+                where: { itemId },
+            })
+
+            req.files.map(async (file) => {
+                result = await cloudinary.uploader.upload(file.path)
+                await ItemImage.create({
+                    imageURL: result.secure_url,
+                    cloudinaryId: result.public_id,
+                    itemId: updatedItem.id,
+                })
+            })
+        }
+
         return res.status(200).json({
             success: true,
             message: 'Item was updated.',
@@ -168,6 +194,15 @@ exports.remove = async (req, res, next) => {
                 message:
                     'Access denied ! Only creator of this item can delete.',
             })
+
+        const images = await ItemImage.findAll({ where: { itemId } })
+        images.map(async (image) => {
+            await cloudinary.uploader.destroy(image.cloudinaryId)
+        })
+
+        await ItemImage.destroy({
+            where: { itemId },
+        })
 
         const deletedItem = await Item.destroy({
             where: { id: itemId },

@@ -84,7 +84,7 @@ exports.create = async (req, res, next) => {
         })
 
     try {
-        const createdService = await Item.create(
+        const createdItem = await Item.create(
             {
                 name,
                 description,
@@ -118,7 +118,7 @@ exports.create = async (req, res, next) => {
         return res.status(200).json({
             success: true,
             message: 'New item was added.',
-            data: createdService,
+            data: createdItem,
         })
     } catch (err) {
         return next(err)
@@ -147,6 +147,26 @@ exports.update = async (req, res, next) => {
             size,
         })
 
+        if (req.files && req.files.length > 0) {
+            const images = await ItemImage.findAll({ where: { itemId } })
+            images.map(async (image) => {
+                await cloudinary.uploader.destroy(image.cloudinaryId)
+            })
+
+            await ItemImage.destroy({
+                where: { itemId },
+            })
+
+            req.files.map(async (file) => {
+                result = await cloudinary.uploader.upload(file.path)
+                await ItemImage.create({
+                    imageURL: result.secure_url,
+                    cloudinaryId: result.public_id,
+                    itemId: updatedItem.id,
+                })
+            })
+        }
+
         return res.status(200).json({
             success: true,
             message: 'Item was updated.',
@@ -168,6 +188,15 @@ exports.remove = async (req, res, next) => {
                 success: false,
                 message: 'Item not found!',
             })
+
+        const images = await ItemImage.findAll({ where: { itemId } })
+        images.map(async (image) => {
+            await cloudinary.uploader.destroy(image.cloudinaryId)
+        })
+
+        await ItemImage.destroy({
+            where: { itemId },
+        })
 
         const deletedItem = await Item.destroy({
             where: { id: itemId },

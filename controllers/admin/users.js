@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs')
 const cloudinary = require('../../utils/cloudinary')
-const { User } = require('../../models')
+const { User, ItemImage } = require('../../models')
 const { createValidation } = require('../../validation/admin/users')
 
 exports.all = async (req, res, next) => {
@@ -108,17 +108,8 @@ exports.create = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     const { userId } = req.params
     let result = null
-    const {
-        firstName,
-        lastName,
-        email,
-        password,
-        role,
-        gender,
-        address,
-        city,
-        country,
-    } = req.body
+    const { firstName, lastName, email, role, gender, address, city, country } =
+        req.body
 
     try {
         const singleUser = await User.findByPk(userId)
@@ -141,16 +132,11 @@ exports.update = async (req, res, next) => {
             }
         }
 
-        // Generating hashed password
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password, salt)
-
         const updatedUser = await User.update(
             {
                 firstName,
                 lastName,
                 email,
-                password: hashedPassword,
                 role,
                 gender,
                 address,
@@ -188,6 +174,12 @@ exports.remove = async (req, res, next) => {
                 success: false,
                 message: 'User not found!',
             })
+
+        try {
+            await cloudinary.uploader.destroy(singleUser.cloudinaryId)
+        } catch (err) {
+            //
+        }
 
         const deletedUser = await User.destroy({
             where: { id: userId },

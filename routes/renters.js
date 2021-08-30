@@ -17,7 +17,12 @@ router.get('/items', verifyToken, getUploadedItems)
 router.post('/items/new', verifyToken, upload.array('images', 3), create)
 
 // edit item
-router.put('/items/update/:itemId', verifyToken, update)
+router.put(
+    '/items/update/:itemId',
+    verifyToken,
+    upload.array('images', 3),
+    update
+)
 
 // remove item
 router.delete('/items/delete/:itemId', verifyToken, remove)

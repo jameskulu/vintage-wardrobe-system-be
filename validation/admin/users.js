@@ -17,6 +17,7 @@ exports.createValidation = (data) => {
         address: Joi.string().allow(''),
         city: Joi.string().allow(''),
         country: Joi.string().allow(''),
+        image: Joi.required(),
     })
     return schema.validate(data)
 }
