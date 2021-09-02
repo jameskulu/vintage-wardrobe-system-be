@@ -9,18 +9,31 @@ chai.use(chaiHttp)
 describe('Wishlist API', () => {
     describe('POST /api/users/wishlist/add', () => {
         it('It add item in wishlist', (done) => {
-            const itemId = "603c7476a761db00e88d0649";
-            const userId = "603c7476a761db00e649";
             chai.request(server)
-                .post('/api/users/wishlist/add' + itemId + userId)
-                .send(itemId)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
+                    var { token } = res.body
+
+                    const wishlist = {
+                        itemId: '6cd71987-5368-4217-bffe-fa773737310f',
+                    }
+                    chai.request(server)
+                        .post('/api/users/wishlist/add')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(wishlist)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })

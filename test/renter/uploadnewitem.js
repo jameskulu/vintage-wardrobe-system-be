@@ -8,39 +8,38 @@ chai.use(chaiHttp)
 
 describe('Renter API', () => {
     describe('POST /api/renter/items/new', () => {
-        it("It should login get a token and upload new item",(done)=>{
-
+        it('It should create a new item', (done) => {
             chai.request(server)
-            .post("/api/users/login")
-            .send({
-                email:"nepalibabu@gmail.com",
-                password:"$2a$10$Ikj89Rsv.YIeMC/lKV5hnunwN5o/a7muyffabyBKJLDBFWogel9Qa"
-            })
-            .end((err,response)=>{
-                response.should.have.status(200)
-                var token = response.body.token;
-        
-            const item = {
-                name:"Dress",
-                description:"pink outfit",
-                price:"48",
-                size:"Medium",
-                color:"Pink",                      
-                subCategoryId:"d5145c7c-b967-47c3-b1a2-2ffb43763d75",
-            }
-            chai.request(server)
-                .post("/api/renter/items/new")
-                .set('Authorization','Bearer ' + token)
-                .send(item)
-                .end((err,response)=>{
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
                 })
-            })
+                .end((err, res) => {
+                    response.should.have.status(200)
+                    var { token } = res.body
+
+                    const item = {
+                        name: 'tdd testing item',
+                        description: 'this is rental clothes',
+                        price: 500,
+                        color: 'Red',
+                        size: 'Small',
+                        subCategoryId: '0b2f1d76-99ea-4dd5-87c8-d5d7aad6a1b6',
+                    }
+                    chai.request(server)
+                        .post('/api/renter/items/new')
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(item)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
+                })
         })
     })
 })

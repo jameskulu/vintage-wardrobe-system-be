@@ -10,7 +10,7 @@ describe('Category API', () => {
     describe('GET /api/categories', () => {
         it('It should get all the categories', (done) => {
             chai.request(server)
-                .get('/api/categories/')
+                .get('/api/categories')
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -24,9 +24,9 @@ describe('Category API', () => {
 
     describe('GET /api/categories/:categoryId', () => {
         it('It should get a single category', (done) => {
-            const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c'
+            const categoryId = 'ec9b4d54-ffe8-4fef-a761-6a9600e07780'
             chai.request(server)
-                .get('/api/categories/' + categoryId)
+                .get(`/api/categories/${categoryId}`)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -42,7 +42,7 @@ describe('Category API', () => {
         it('It should get a single product', (done) => {
             const categoryName = 'Kids'
             chai.request(server)
-                .get('/api/categories/name/:categoryName/' + categoryName)
+                .get(`/api/categories/name/${categoryName}`)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
@@ -58,7 +58,7 @@ describe('Category API', () => {
         it('It should get a item by category name', (done) => {
             const categoryName = 'Kids'
             chai.request(server)
-                .get('/api/categories/items/:categoryName/' + categoryName)
+                .get(`/api/categories/items/${categoryName}`)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')
