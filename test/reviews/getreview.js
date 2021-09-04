@@ -9,9 +9,9 @@ chai.use(chaiHttp)
 describe('Review API', () => {
     describe('GET /api/reviews', () => {
         it('It should get a review', (done) => {
-            const itemId = 'c2945cf9-8f66-48fd-84f1-7ec6978bcefa'
+            const itemId = '6cd71987-5368-4217-bffe-fa773737310f'
             chai.request(server)
-                .get('/api/reviews/:itemId/' + itemId)
+                .get(`/api/reviews/${itemId}`)
                 .end((err, response) => {
                     response.should.have.status(200)
                     response.body.should.be.a('object')

@@ -8,54 +8,20 @@ chai.use(chaiHttp)
 
 describe('AdminPanel API', () => {
     describe('GET /api/admin/sub-categories', () => {
-        it('It should get all the sub-categories', (done) => {
-            chai.request(server)
-                .get('/api/admin/sub-categories/')
-                .end((err, response) => {
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
-                })
-        })
-    })
-
-    describe('GET /api/admin/sub-categories', () => {
-        it('It should get a single subcategory by sub-categoryid', (done) => {
-            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c'
-            chai.request(server)
-                .get('/api/admin/sub-categories/:subCategoryId/' + subCategoryId)
-                .end((err, response) => {
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
-                })
-        })
-    })
-
-    describe('POST /api/admin/sub-categories', () => {
-        it('It should login get a token and post a new sub-category', (done) => {
+        it('It should get all the sub categories', (done) => {
             chai.request(server)
                 .post('/api/users/login')
                 .send({
-                    email: 'rijan22shrestha@gmail.com',
-                    password: '$2a$10$s9ZXlLt1XUzWnoesgRuw2e86yyJQkSo.LGK2bd5qoAL2wTbWf6S8u',
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
                 })
-                .end((err, response) => {
+                .end((err, res) => {
                     response.should.have.status(200)
-                    var token = response.body.token
+                    var { token } = res.body
 
-                    const name = 'Women';
-                    const categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
                     chai.request(server)
-                        .post('/api/admin/sub-categories/new/' + categoryId)
-                        .set('Authorization', 'Bearer ' + token)
-                        .send(name)
+                        .get('/api/admin/sub-categories')
+                        .set('Authorization', `Bearer ${token}`)
                         .end((err, response) => {
                             response.should.have.status(200)
                             response.body.should.be.a('object')
@@ -68,35 +34,123 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('PUT /api/admin/sub-categories', () => {
-        it('It should be able to update sub-categories', (done) => {
-            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
-            const updatedSC = {
-                name = 'Women',
-                categoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c',
-            }
+    describe('GET /api/admin/sub-categories/:subCategoryId', () => {
+        it('It should get a single sub-category', (done) => {
             chai.request(server)
-                .put('/api/admin/sub-categories/update/:subCategoryId' + subCategoryId + categoryId)
-                .send(updatedSC)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
+                    var { token } = res.body
+                    const subCategoryId = '0b2f1d76-99ea-4dd5-87c8-d5d7aad6a1b6'
+
+                    chai.request(server)
+                        .get(`/api/admin/sub-categories/${subCategoryId}`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })
 
-    describe('Delete /api/admin/sub-categories', () => {
-        it('It should be able to delete sub-categories', (done) => {
-            const subCategoryId = '847109dc-50ac-43ec-bb3f-8d60fe73856c';
+    describe('POST /api/admin/sub-categories/new', () => {
+        it('It should post a new sub categories', (done) => {
             chai.request(server)
-                .delete('/api/admin/sub-categories/delete/:subCategoryId/'+ subCategoryId)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    done()
+                    var { token } = res.body
+                    const subCategory = {
+                        name: 'testing sub category',
+                        categoryId: 'ec9b4d54-ffe8-4fef-a761-6a9600e07780',
+                    }
+                    chai.request(server)
+                        .get(`/api/admin/sub-categories/add`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(subCategory)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
+                })
+        })
+    })
+
+    describe('PUT /api/admin/sub-categories/update/userId', () => {
+        it('It should be able to update sub categories', (done) => {
+            chai.request(server)
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
+                    response.should.have.status(200)
+                    var { token } = res.body
+                    const subCategoryId = '0b2f1d76-99ea-4dd5-87c8-d5d7aad6a1b6'
+                    const updateSubCategory = {
+                        name: 'testing update sub category',
+                    }
+                    chai.request(server)
+                        .put(
+                            `/api/admin/sub-categories/update/${subCategoryId}`
+                        )
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(updateSubCategory)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
+                })
+        })
+    })
+
+    describe('DELETE /api/admin/sub-categories', () => {
+        it('It should be able to delete sub-categories', (done) => {
+            chai.request(server)
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
+                    response.should.have.status(200)
+                    var { token } = res.body
+                    const subCategoryId = '0b2f1d76-99ea-4dd5-87c8-d5d7aad6a1b6'
+                    chai.request(server)
+                        .delete(
+                            `/api/admin/sub-categories/delete/${subCategoryId}`
+                        )
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })

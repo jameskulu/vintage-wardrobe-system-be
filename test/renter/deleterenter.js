@@ -7,14 +7,30 @@ chai.should()
 chai.use(chaiHttp)
 
 describe('Renter API', () => {
-    describe('Delete /api/renter/items/delete/:itemId', () => {
-        it('It should be able to delete', (done) => {
-            const itemId = 'be923384-ff69-4bdd-b5e6-6e0e0b85ce33'
+    describe('DELETE /api/renter/items/delete/:itemId', () => {
+        it('It should be able to delete an item', (done) => {
             chai.request(server)
-                .delete('/api/renter/items/delete/' + itemId + userId)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    done()
+                    var { token } = res.body
+
+                    const itemId = '6cd71987-5368-4217-bffe-fa773737310f'
+                    chai.request(server)
+                        .delete(`/api/renter/items/delete/${itemId}`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })

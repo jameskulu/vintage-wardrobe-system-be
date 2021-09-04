@@ -10,61 +10,18 @@ describe('AdminPanel API', () => {
     describe('GET /api/admin/users', () => {
         it('It should get all the users', (done) => {
             chai.request(server)
-                .get('/api/admin/users/')
-                .end((err, response) => {
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
-                })
-        })
-    })
-
-    describe('GET /api/admin/users', () => {
-        it('It should get a single user by userid', (done) => {
-            const userId = 'a3abc90c-e5df-4beb-a50b-6b7236011485'
-            chai.request(server)
-                .get('/api/admin/users/:userId/' + userId)
-                .end((err, response) => {
-                    response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
-                })
-        })
-    })
-
-    describe('POST /api/admin/users', () => {
-        it('It should login get a token and post a new user', (done) => {
-            chai.request(server)
                 .post('/api/users/login')
                 .send({
-                    email: 'rijan22shrestha@gmail.com',
-                    password: '$2a$10$s9ZXlLt1XUzWnoesgRuw2e86yyJQkSo.LGK2bd5qoAL2wTbWf6S8u',
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
                 })
-                .end((err, response) => {
+                .end((err, res) => {
                     response.should.have.status(200)
-                    var token = response.body.token
+                    var { token } = res.body
 
-                    const product = {
-                        firstName : 'Arbin',
-                        lastName: 'Choudhary ',
-                        email: 'arbin@123gmail.com',
-                        password: 'arbin12345',
-                        role: 'customer',
-                        gender: 'Male',
-                        address: 'Kathmandu',
-                        city: 'battisputali',
-                        country: 'Nepal'
-                    }
                     chai.request(server)
-                        .post('/api/admin/users/new')
-                        .set('Authorization', 'Bearer ' + token)
-                        .send(product)
+                        .get('/api/admin/users/')
+                        .set('Authorization', `Bearer ${token}`)
                         .end((err, response) => {
                             response.should.have.status(200)
                             response.body.should.be.a('object')
@@ -77,42 +34,133 @@ describe('AdminPanel API', () => {
         })
     })
 
-    describe('PUT /api/admin/users', () => {
-        it('It should be able to update users', (done) => {
-            const userId = '057c5512-d6b0-4d5d-8215-9fc37f4ff0bd';
-            const updateuser = {
-                firstName : 'Janak',
-                lastName: 'Gurung',
-                email: 'janak12@gmail.com',
-                password: 'janak1234',
-                role: 'renter',
-                gender: 'Male',
-                address: 'Schooldada',
-                city: 'Urlabari',
-                country: 'Morang',
-            }
+    describe('GET /api/admin/users/:userId', () => {
+        it('It should get a single user by userId', (done) => {
             chai.request(server)
-                .put('/api/admin/users/update/:userId' + userId)
-                .send(updateuser)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    response.body.should.be.a('object')
-                    response.body.should.have.property('success')
-                    response.body.should.have.property('message')
-                    response.body.should.have.property('data')
-                    done()
+                    var { token } = res.body
+                    const userId = '13963633-7326-4da5-be29-8685c3b703bf'
+
+                    chai.request(server)
+                        .get(`/api/admin/users/${userId}`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })
 
-    describe('Delete /api/admin/users', () => {
-        it('It should be able to delete users', (done) => {
-            const userId = '057c5512-d6b0-4d5d-8215-9fc37f4ff0bd';
+    describe('POST /api/admin/users/new', () => {
+        it('It should login get a token and post a new user', (done) => {
             chai.request(server)
-                .delete('/api/admin/users/delete/:userId/'+ userId)
-                .end((err, response) => {
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
                     response.should.have.status(200)
-                    done()
+                    var { token } = res.body
+                    const item = {
+                        firstName: 'Arbin',
+                        lastName: 'Choudhary ',
+                        email: 'arbin@123gmail.com',
+                        password: 'arbin12345',
+                        role: 'customer',
+                        gender: 'Male',
+                        address: 'Kathmandu',
+                        city: 'battisputali',
+                        country: 'Nepal',
+                    }
+                    chai.request(server)
+                        .get(`/api/admin/users/add`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(item)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
+                })
+        })
+    })
+
+    describe('PUT /api/admin/users/update/userId', () => {
+        it('It should be able to update users', (done) => {
+            chai.request(server)
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
+                    response.should.have.status(200)
+                    var { token } = res.body
+                    const userId = '13963633-7326-4da5-be29-8685c3b703bf'
+                    const updateItem = {
+                        firstName: 'Janak',
+                        lastName: 'Gurung',
+                        email: 'janak12@gmail.com',
+                        role: 'user',
+                        gender: 'ma',
+                        address: 'Park',
+                        city: 'New York',
+                        country: 'USA',
+                    }
+                    chai.request(server)
+                        .put(`/api/admin/users/update/${userId}`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .send(updateItem)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
+                })
+        })
+    })
+
+    describe('DELETE /api/admin/users', () => {
+        it('It should be able to delete users', (done) => {
+            chai.request(server)
+                .post('/api/users/login')
+                .send({
+                    email: 'tddtesting@yopmail.com',
+                    password: 'Test@123',
+                })
+                .end((err, res) => {
+                    response.should.have.status(200)
+                    var { token } = res.body
+                    const userId = 'da6c0067-5e14-47e8-9d45-2e109b744500'
+                    chai.request(server)
+                        .delete(`/api/admin/users/delete/${userId}`)
+                        .set('Authorization', `Bearer ${token}`)
+                        .end((err, response) => {
+                            response.should.have.status(200)
+                            response.body.should.be.a('object')
+                            response.body.should.have.property('success')
+                            response.body.should.have.property('message')
+                            response.body.should.have.property('data')
+                            done()
+                        })
                 })
         })
     })

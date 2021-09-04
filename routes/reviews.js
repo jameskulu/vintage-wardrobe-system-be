@@ -6,10 +6,10 @@ const {
     getItemReview,
 } = require('../controllers/reviews')
 
-router.get('/reviewed', verifyToken, getItemReview)
+router.get('/reviewed', getItemReview)
 
 // get all reviews of an item
-router.get('/:itemId', verifyToken, getReview)
+router.get('/:itemId', getReview)
 
 // upload item
 router.post('/new', verifyToken, addReview)
