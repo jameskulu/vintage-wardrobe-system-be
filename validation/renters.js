@@ -32,7 +32,7 @@ exports.createValidation = (data) => {
             'string.empty': `"Sub Category" cannot be an empty field`,
             'any.required': `"Sub Category" is a required field`,
         }),
-        images: Joi.required(),
+        images: Joi.allow('', null),
     })
     return schema.validate(data)
 }
